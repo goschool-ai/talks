@@ -219,10 +219,10 @@
       font-size: 18px;
     }
 
-    .cover-qr { position: absolute; top: 112px; right: 72px; z-index: 1; width: 196px; }
-    .cover-qr img { display: block; width: 196px; height: 196px; padding: 10px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px rgba(56,53,65,.14); }
-    .slide .cover-qr p { margin-top: 12px; color: var(--ink-soft); font-size: 16px; font-weight: 600; line-height: 1.35; }
-    .cover-qr b { display: block; color: var(--ink); font-size: 18px; font-weight: 750; }
+    .cover-qr { position: absolute; top: 112px; right: 72px; z-index: 1; display: flex; flex-direction: column-reverse; width: 270px; }
+    .cover-qr img { display: block; width: 270px; height: 270px; padding: 14px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgba(56,53,65,.14), 0 18px 40px -22px rgba(56,53,65,.4); }
+    .slide .cover-qr p { margin: 0 0 12px; color: var(--ink-soft); font-size: 18px; font-weight: 600; line-height: 1.35; }
+    .cover-qr b { display: block; color: var(--ink); font-size: 19px; font-weight: 750; white-space: nowrap; }
 
     .cover-orbit {
       position: absolute;
@@ -322,8 +322,12 @@
     .close .brand { filter: brightness(0) invert(1); }
     .close .brand .divider { background: rgba(255,255,255,.35); }
     .close .brand .nitro { color: var(--white); }
+    .slide .big-quote { position: absolute; top: 150px; left: 72px; width: 1080px; font-size: 52px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.22; text-wrap: balance; }
+    .big-quote .q-mark { text-decoration: underline; text-decoration-color: var(--good); text-decoration-thickness: 7px; text-underline-offset: 9px; text-decoration-skip-ink: none; }
+    .slide .quote-by { position: absolute; left: 72px; top: 520px; padding-top: 18px; border-top: 3px solid var(--purple); color: var(--purple); font-size: 24px; font-weight: 700; }
+    .quote-by span { display: block; margin-top: 6px; color: var(--ink-soft); font-size: 18px; font-weight: 560; font-style: italic; }
     .close h2 { position: absolute; top: 166px; left: 72px; width: 850px; font-size: 59px; font-weight: 780; letter-spacing: -0.04em; line-height: 1.15; text-wrap: balance; }
-    .close .second { position: absolute; top: 426px; left: 310px; width: 610px; padding-top: 24px; border-top: 2px solid var(--mint); color: #e9e2ff; font-size: 30px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+    .close .second { position: absolute; top: 400px; left: 72px; width: 760px; padding-top: 24px; border-top: 2px solid var(--mint); color: #e9e2ff; font-size: 30px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
     .close .discussion { position: absolute; right: 72px; bottom: 48px; padding: 9px 14px 10px; border-radius: 4px; background: var(--yellow); color: var(--ink); font-family: "Pogonia", "Sora", sans-serif; font-size: 20px; font-weight: 700; transform: rotate(-3deg); }
     .close-qr { position: absolute; top: 182px; right: 72px; width: 245px; }
     .close-qr img { display: block; width: 245px; height: 245px; padding: 10px; background: var(--white); }
@@ -400,6 +404,9 @@
     .hub .spoke.on { opacity: 1; }
     .hub .ghosts, .slide .hub-ask { opacity: 0; transition: opacity .45s ease .25s; }
     .hub:has(.moodle-node.shown) .ghosts, .slide:has(.moodle-node.shown) .hub-ask { opacity: 1; }
+    .hub-t2 { display: none; }
+    .slide:has(.moodle-node.shown) .hub-t1 { display: none; }
+    .slide:has(.moodle-node.shown) .hub-t2 { display: inline; }
     .hub .plug { fill: var(--purple); }
     .hub .h-ghost { fill: var(--ink-soft); font-size: 22px; font-weight: 700; }
     .slide .hub-ask { position: absolute; top: 118px; left: 72px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
@@ -834,8 +841,8 @@
         </section>
 
         <section class="slide slide-pad" aria-label="Konnektorok">
-          <h2 class="slide-title">Mire kötöttem rá?</h2>
-          <p class="hub-ask">Nálatok mit kell még kézzel csinálni?</p>
+          <h2 class="slide-title"><span class="hub-t1">Mire kötöttem rá?</span><span class="hub-t2">És nálatok?</span></h2>
+          <p class="hub-ask">Mit kell még kézzel csinálni?</p>
           <svg class="hub" viewBox="0 0 1280 720" role="img" aria-label="Én kérek és jóváhagyok; az agentic AI konnektorokon át éri el a GitHubot, a Canvast, az e-mailt és a naptárat. Kattintásra a Canvas helyén Moodle a Nitróval, majd további, még elképzelt konnektorok: Neptun, Teams, tanszéki rendszer.">
             <rect x="510" y="170" width="260" height="56" rx="28" fill="#d7eee2"/>
             <text x="640" y="206" text-anchor="middle" style="fill:#0b4a33;font-size:21px;font-weight:780">Én: kérek, jóváhagyok</text>
@@ -847,8 +854,7 @@
             <g class="canvas-node"><path class="spoke" d="M723 381L893 320"/><circle class="plug" cx="893" cy="320" r="6"/></g>
             <g class="ghosts"><path class="spoke ghost" d="M563 453L338 579" stroke-dasharray="3 9"/><circle class="plug" cx="338" cy="579" r="6"/><circle cx="300" cy="600" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="300" y="609" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="246" y="609" text-anchor="end">Neptun</text><path class="spoke ghost" d="M640 498L640 568" stroke-dasharray="3 9"/><circle class="plug" cx="640" cy="568" r="6"/><circle cx="640" cy="612" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="640" y="621" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="694" y="621" text-anchor="start">tanszéki rendszer</text><path class="spoke ghost" d="M718 450L971 580" stroke-dasharray="3 9"/><circle class="plug" cx="971" cy="580" r="6"/><circle cx="1010" cy="600" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="1010" y="609" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="1064" y="609" text-anchor="start">Teams</text></g>
             <circle cx="640" cy="410" r="82" fill="var(--purple)"/>
-            <text x="640" y="410" text-anchor="middle" style="fill:#fff;font-size:24px;font-weight:780">Agentic AI</text>
-            <text x="640" y="436" text-anchor="middle" style="fill:#e2d9fb;font-size:16px;font-weight:600">Claude Code</text>
+            <text class="hub-ai" x="640" y="419" text-anchor="middle" style="fill:#fff;font-size:24px;font-weight:780">Agentic AI</text>
             <circle cx="330" cy="300" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g transform="translate(308 278) scale(2.75)" fill="#24292f" aria-label="GitHub logó"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></g><text class="h-name" x="260" y="294" text-anchor="end">GitHub</text><text class="h-stat" x="260" y="322" text-anchor="end">28 spike-issue</text><text class="h-stat" x="260" y="344" text-anchor="end">commitok, naplók</text>
             <circle cx="330" cy="455" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g class="ico" transform="translate(310 435) scale(2.2)"><rect x="1" y="3" width="16" height="12" rx="2"/><path d="M1.5 4l7.5 6 7.5-6"/></g><text class="h-name" x="260" y="449" text-anchor="end">E-mail</text><text class="h-stat" x="260" y="477" text-anchor="end">65 levélpiszkozat</text>
             <circle cx="950" cy="455" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g class="ico" transform="translate(930 435) scale(2.2)"><rect x="1" y="3" width="16" height="13" rx="2"/><path d="M1 7.5h16M5 1v4M13 1v4"/></g><text class="h-name" x="1020" y="449" text-anchor="start">Naptár</text><text class="h-stat" x="1020" y="477" text-anchor="start">órák, határidők</text>
@@ -912,10 +918,16 @@
           <div class="slide-mark">03 · Az oktató</div><span class="slide-no">27</span>
         </section>
 
+        <section class="slide quote-slide" aria-label="Whitehead a kiszervezésről">
+          <p class="big-quote">„A civilizáció úgy halad előre, hogy egyre több fontos műveletet tudunk elvégezni <span class="q-mark">anélkül, hogy gondolkodnánk rajtuk</span>.”</p>
+          <p class="quote-by">Alfred North Whitehead<span>An Introduction to Mathematics, 1911</span></p>
+          <span class="slide-no">28</span>
+        </section>
+
         <section class="slide close" aria-label="Zárókérdés">
           <div class="brand"><img src="assets/img/goschool-logo.svg" alt="GoSchool"><span class="divider" aria-hidden="true"></span><span class="nitro">nitro</span></div>
-          <h2>Melyik korábbi feladatod nem bizonyítja már ugyanazt a tudást, mint két éve?</h2>
-          <p class="second">Mit kell helyette a hallgatónak megértenie, ellenőriznie vagy megvédenie?</p>
+          <h2>Ne álljunk ellen a kiszervezésnek.<br>Használjuk az erejét.</h2>
+          <p class="second">Mit csinál meg az AI a hallgatóidnak?</p>
           <span class="discussion">beszélgessünk</span>
         </section>
       </div>
@@ -923,7 +935,7 @@
 
     <nav class="controls" aria-label="Prezentáció vezérlése">
       <button id="prev" type="button" aria-label="Előző dia">←</button>
-      <span class="counter" id="counter">1 / 28</span>
+      <span class="counter" id="counter">1 / 29</span>
       <button id="next" type="button" aria-label="Következő dia">→</button>
       <button id="full" type="button" class="full-btn" aria-label="Teljes képernyő (F)"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Teljes képernyő</span></button>
       <span class="hint">Billentyűzet: ← → · szóköz · Home · End · F</span>
