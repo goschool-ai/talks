@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI az oktató kezében · BME Oktatói Klub</title>
+  <style>
+    @font-face {
+      font-family: "Sora";
+      src: url("assets/fonts/Sora-VariableFont_wght.ttf") format("truetype");
+      font-weight: 100 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Pogonia";
+      src: url("assets/fonts/Pogonia-Bold.woff") format("woff");
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Pogonia";
+      src: url("assets/fonts/Pogonia-ExtraBold.woff") format("woff");
+      font-weight: 800;
+      font-display: swap;
+    }
+
+    :root {
+      --purple: #5926eb;
+      --purple-dark: #3a2596;
+      --ink: #383541;
+      --ink-soft: #66626d;
+      --cream: #f0f0e6;
+      --white: #ffffff;
+      --yellow: #f8d93c;
+      --mint: #8af7c8;
+      --lavender: #ece6fb;
+      --lavender-line: #dcd2f7;
+      --gray: #dedee0;
+      --panel: #f8f8f4;
+      --red: #eb5b4f;
+      --good: #13865c;
+      --alert: #d63f33;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      background: #24222b;
+      color: var(--ink);
+      font-family: "Sora", system-ui, sans-serif;
+    }
+
+    body {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 24px;
+      overflow: auto;
+    }
+
+    body.clean {
+      display: block;
+      width: 1280px;
+      height: 720px;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .deck-shell {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+    }
+
+    body.clean .deck-shell { display: block; }
+
+    .stage {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+    }
+
+    .deck {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.38);
+      transform-origin: top left;
+    }
+
+    body.clean .deck { box-shadow: none; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      width: 1280px;
+      height: 720px;
+      overflow: visible;
+      background: var(--cream);
+      color: var(--ink);
+    }
+
+    .slide.active { display: block; }
+    .slide h1, .slide h2, .slide h3, .slide p { margin: 0; }
+
+    .slide-pad { padding: 56px 72px 62px; }
+
+    .slide-title {
+      max-width: 1040px;
+      font-size: 50px;
+      font-weight: 780;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+
+    .source {
+      position: absolute;
+      right: 132px;
+      bottom: 24px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+
+    .slide-mark {
+      position: absolute;
+      bottom: 24px;
+      left: 72px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .slide-mark::before {
+      width: 22px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--purple);
+      content: "";
+    }
+
+    .slide-no {
+      position: absolute;
+      right: 72px;
+      bottom: 24px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .brand {
+      position: absolute;
+      top: 52px;
+      left: 72px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand img { display: block; width: 150px; height: auto; }
+    .brand .divider { width: 1px; height: 29px; background: rgba(56, 53, 65, 0.35); }
+    .brand .nitro { font-size: 36px; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+
+    /* 01 cover */
+    .cover .event {
+      position: absolute;
+      top: 62px;
+      right: 72px;
+      color: var(--ink-soft);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .cover-copy {
+      position: absolute;
+      top: 190px;
+      left: 72px;
+      width: 840px;
+    }
+
+    .cover h1 {
+      font-size: 88px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+
+    .cover .subtitle {
+      width: 760px;
+      margin-top: 30px;
+      color: var(--purple-dark);
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+
+    .cover .byline {
+      position: absolute;
+      bottom: 64px;
+      left: 76px;
+      color: var(--ink-soft);
+      font-size: 18px;
+    }
+
+    .cover-orbit {
+      position: absolute;
+      right: -115px;
+      bottom: -174px;
+      width: 510px;
+      height: 510px;
+      border: 54px solid var(--lavender);
+      border-radius: 50%;
+    }
+
+    .cover-orbit::after {
+      position: absolute;
+      top: 63px;
+      left: 63px;
+      width: 276px;
+      height: 276px;
+      border-radius: 50%;
+      background: var(--purple);
+      content: "";
+    }
+    .slide .vcae-one { margin-top: 14px; font-size: 22px; font-weight: 650; }
+    .slide .agenda-from { margin-top: 10px; color: var(--purple); font-size: 20px; font-weight: 700; }
+    .slide .penalty-intro { margin-top: 10px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+    .penalty { margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .penalty-cell { padding-top: 18px; border-top: 8px solid var(--alert); }
+    .penalty-cell .penalty-value { color: var(--alert); }
+    .penalty-cell.up { border-top-color: var(--good); }
+    .penalty-cell.neutral { border-top-color: var(--ink); }
+    .penalty-cell.neutral .penalty-value { color: var(--ink); }
+    .penalty-cell.key { position: relative; z-index: 0; transition: border-color .35s ease; }
+    .penalty-cell.key::before { position: absolute; inset: 0 -14px -14px; z-index: -1; border-radius: 0 0 6px 6px; background: #e2d9fb; opacity: 0; transition: opacity .35s ease; content: ""; }
+    .penalty-cell.key .penalty-value { transition: color .35s ease; }
+    .penalty-slide:has(.penalty-turn.shown) .penalty-cell.key { border-top-color: var(--purple); }
+    .penalty-slide:has(.penalty-turn.shown) .penalty-cell.key::before { opacity: 1; }
+    .penalty-slide:has(.penalty-turn.shown) .penalty-cell.key .penalty-value { color: var(--purple); }
+    .penalty-value { font-family: "Pogonia", "Sora", sans-serif; font-size: 64px; font-weight: 750; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .penalty-cell.up .penalty-value { color: var(--good); }
+    .slide .penalty-label { margin-top: 12px; font-size: 18px; font-weight: 650; line-height: 1.3; }
+    .slide .penalty-when { margin-top: 6px; color: var(--ink-soft); font-size: 18px; line-height: 1.4; }
+    .penalty-slide .source { right: 118px; }
+    .bar-row.constructive .bar-label { font-weight: 700; }
+    .slide .penalty-turn .hl-purple { display: block; color: var(--purple); }
+    .slide .penalty-turn { margin-top: 64px; max-width: 1136px; font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; text-wrap: balance; }
+
+    /* 03 messages */
+    .messages-count { margin-top: 18px; color: var(--purple); font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+    .messages .bars-wrap { margin-top: 24px; }
+
+    /* 04 interpretation */
+    .nitro-shot { position: absolute; top: 210px; right: 72px; left: 72px; height: 420px; margin: 0; }
+    .nitro-shot > img { display: block; width: 672px; height: 420px; border-radius: 8px; box-shadow: 0 0 0 1px rgba(56,53,65,.18), 0 18px 40px -18px rgba(56,53,65,.35); }
+    .nitro-qr { position: absolute; top: 0; right: 0; width: 360px; }
+    .nitro-qr img { display: block; width: 360px; height: 360px; padding: 14px; background: #fff; border-radius: 6px; box-shadow: 0 0 0 1px rgba(56,53,65,.14); }
+    .nitro-qr p { margin-top: 14px; color: var(--ink-soft); font-size: 18px; font-weight: 650; text-align: center; }
+
+    /* 08 room question */
+    .section-break { background: var(--ink); color: var(--cream); }
+    .section-break .section-no { position: absolute; top: 72px; left: 72px; color: var(--mint); font-family: "Pogonia", "Sora", sans-serif; font-size: 22px; font-weight: 750; letter-spacing: .04em; }
+    .section-break h2 { position: absolute; top: 250px; left: 72px; width: 1040px; font-size: 76px; font-weight: 780; letter-spacing: -0.045em; line-height: 1.08; text-wrap: balance; }
+    .section-break .slide-mark, .section-break .slide-no { color: #bdb8c9; }
+    .section-break .slide-mark::before { background: var(--mint); }
+    .vcae { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 30px; }
+    .vcae-col h3 { font-size: 26px; font-weight: 750; letter-spacing: -0.02em; }
+    .vcae-col h3 span { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 18px; font-weight: 600; letter-spacing: 0; }
+    .vcae-shot { position: relative; margin-top: 14px; height: 250px; border-radius: 6px; overflow: hidden; background: #8ec9ff center / cover no-repeat; }
+    .vcae-prompt { position: absolute; left: 14px; bottom: 14px; padding: 9px 14px; border-radius: 8px; background: rgba(255,255,255,.94); color: var(--ink); font-size: 20px; font-weight: 700; }
+    .vcae-shot.web { background-color: #fff; background-position: top center; box-shadow: 0 0 0 1px rgba(56,53,65,.18); }
+    .room-question { background: var(--yellow); }
+    .room-question .recall { position: absolute; left: 72px; bottom: 92px; width: 300px; padding-top: 16px; border-top: 8px solid var(--good); }
+    .room-question .recall-value { color: var(--good); font-family: "Pogonia", "Sora", sans-serif; font-size: 72px; font-weight: 750; letter-spacing: -0.03em; line-height: 1; }
+    .room-question .recall-label { margin-top: 10px; font-size: 20px; font-weight: 650; }
+    .room-question .recall.cost { border-top-color: var(--alert); width: 420px; }
+    .room-question .recall.cost .recall-value { color: var(--alert); }
+    .room-question .number { position: absolute; top: 48px; right: 72px; color: rgba(56,53,65,.22); font-size: 118px; font-weight: 800; letter-spacing: -0.06em; }
+    .room-question h2 { position: absolute; top: 124px; left: 72px; width: 1080px; font-size: 67px; font-weight: 780; letter-spacing: -0.045em; line-height: 1.13; text-wrap: balance; }
+    .room-question .slide-mark,
+    .room-question .slide-no { color: var(--ink); }
+    .room-question .slide-mark::before { background: var(--ink); }
+
+    /* 03 bars */
+    .bars-wrap { margin-top: 42px; }
+    .bar-row { display: grid; grid-template-columns: 360px 1fr 82px; gap: 24px; align-items: center; padding: 13px 0; }
+    .bar-label { font-size: 18px; line-height: 1.35; }
+    .bar-track { height: 28px; overflow: hidden; border-radius: 4px; background: #deddd9; }
+    .bar-fill { height: 100%; border-radius: inherit; background: var(--purple); }
+    .bar-row:nth-child(2) .bar-fill { background: #7652ed; }
+    .bar-row:nth-child(3) .bar-fill { background: #9b82e8; }
+    .bar-row:nth-child(4) .bar-fill { background: var(--good); }
+    .bar-value { font-size: 28px; font-weight: 750; font-variant-numeric: tabular-nums; text-align: right; }
+    .bars-foot { margin-top: 28px; display: flex; justify-content: space-between; color: var(--ink-soft); font-size: 16px; }
+    .eeg-slide .source { right: 118px; }
+
+
+    /* 19 close */
+    .close { background: var(--purple); color: var(--white); }
+    .close .brand { filter: brightness(0) invert(1); }
+    .close .brand .divider { background: rgba(255,255,255,.35); }
+    .close .brand .nitro { color: var(--white); }
+    .close h2 { position: absolute; top: 166px; left: 72px; width: 850px; font-size: 59px; font-weight: 780; letter-spacing: -0.04em; line-height: 1.15; text-wrap: balance; }
+    .close .second { position: absolute; top: 426px; left: 310px; width: 610px; padding-top: 24px; border-top: 2px solid var(--mint); color: #e9e2ff; font-size: 30px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+    .close .discussion { position: absolute; right: 72px; bottom: 48px; padding: 9px 14px 10px; border-radius: 4px; background: var(--yellow); color: var(--ink); font-family: "Pogonia", "Sora", sans-serif; font-size: 20px; font-weight: 700; transform: rotate(-3deg); }
+    .close-qr { position: absolute; top: 182px; right: 72px; width: 245px; }
+    .close-qr img { display: block; width: 245px; height: 245px; padding: 10px; background: var(--white); }
+    .close-qr p { margin-top: 15px; color: var(--white); font-size: 18px; font-weight: 650; line-height: 1.4; text-align: center; white-space: nowrap; }
+
+    .controls { display: flex; align-items: center; gap: 12px; color: #dedce5; font-size: 14px; }
+    .controls button { min-width: 42px; height: 38px; border: 1px solid #5f5b69; border-radius: 12px; background: #34313d; color: var(--white); font: inherit; cursor: pointer; }
+    .controls button:hover { background: #403c4a; }
+    .controls button:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+    .controls button:disabled { opacity: .35; cursor: default; }
+    .controls .counter { min-width: 62px; text-align: center; font-variant-numeric: tabular-nums; }
+    .controls .hint { margin-left: 8px; color: #aaa6b2; }
+
+    @media print {
+      @page { size: 13.333333in 7.5in; margin: 0; }
+
+      html, body, body.clean {
+        display: block !important;
+        width: 1280px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        background: transparent !important;
+      }
+
+      .deck-shell, .stage, .deck {
+        position: static !important;
+        display: block !important;
+        width: 1280px !important;
+        height: auto !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        transform: none !important;
+      }
+
+      .slide, .slide.active {
+        position: relative;
+        inset: auto;
+        display: block !important;
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      .controls { display: none !important; }
+    }
+
+    body.clean .controls { display: none; }
+
+    ::selection { background: var(--purple); color: var(--white); }
+    /* Rövidített, 30 perces előadási ív */
+    .cover .byline { max-width: 820px; }
+    .caveat-strip { position: absolute; right: 72px; bottom: 66px; left: 72px; padding-top: 14px; border-top: 1px solid rgba(56,53,65,.24); color: var(--ink-soft); font-size: 18px; line-height: 1.4; }
+  
+    .team-slide { padding: 0; background: #eef3fa; }
+    .team-slide .team-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .team-slide .team-tag { position: absolute; left: 72px; bottom: 28px; padding: 8px 14px; border-radius: 6px; background: rgba(255,255,255,.9); color: var(--ink); font-size: 18px; font-weight: 650; }
+    .team-slide .slide-no { padding: 2px 8px; border-radius: 4px; background: rgba(255,255,255,.9); }
+    .hub { position: absolute; inset: 0; width: 1280px; height: 720px; }
+    .hub text { font-family: "Sora", sans-serif; }
+    .hub .h-name { fill: var(--ink); font-size: 26px; font-weight: 780; letter-spacing: -0.02em; }
+    .hub .h-stat { fill: var(--ink-soft); font-size: 18px; font-weight: 560; }
+    .hub .h-link { fill: var(--ink-soft); font-size: 16px; font-weight: 650; }
+    .hub .spoke { fill: none; stroke: var(--purple); stroke-width: 3; stroke-linecap: round; opacity: .4; }
+    .hub .spoke.on { opacity: 1; }
+    .hub .ghosts, .slide .hub-ask { opacity: 0; transition: opacity .45s ease .25s; }
+    .hub:has(.moodle-node.shown) .ghosts, .slide:has(.moodle-node.shown) .hub-ask { opacity: 1; }
+    .hub .plug { fill: var(--purple); }
+    .hub .h-ghost { fill: var(--ink-soft); font-size: 22px; font-weight: 700; }
+    .slide .hub-ask { position: absolute; top: 118px; left: 72px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+    .hub .ico { fill: none; stroke: var(--purple); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .hub .canvas-node { transition: opacity .45s ease; }
+    .hub:has(.moodle-node.shown) .canvas-node { opacity: 0; }
+    .did { position: absolute; top: 176px; right: 72px; left: 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .did-col h3 { margin: 0 0 18px; padding-top: 14px; border-top: 6px solid var(--purple); color: var(--purple); font-size: 24px; font-weight: 750; letter-spacing: -0.02em; }
+    .did-col ul { margin: 0; padding: 0; list-style: none; }
+    .did-col li { padding: 9px 0; border-bottom: 1px solid rgba(56,53,65,.14); font-size: 20px; line-height: 1.3; }
+    .did-col li.seen { color: var(--ink-soft); }
+    .did-col li.seen::after { margin-left: 8px; padding: 2px 8px; border-radius: 4px; background: #e2d9fb; color: var(--purple); font-size: 16px; font-weight: 700; white-space: nowrap; content: "láttuk"; }
+    .cli { margin-top: 64px; }
+    .cli-row { display: grid; grid-template-columns: 420px 1fr; align-items: baseline; padding: 26px 0; border-top: 1px solid rgba(56,53,65,.18); }
+    .cli-row:last-child { border-bottom: 1px solid rgba(56,53,65,.18); }
+    .slide .cli-name { color: var(--ink); font-size: 40px; font-weight: 780; letter-spacing: -0.03em; line-height: 1.1; }
+    .slide .cli-when { color: var(--purple); font-size: 18px; font-weight: 700; }
+    .slide .cli-what { margin-top: 6px; color: var(--ink); font-size: 26px; font-weight: 560; line-height: 1.3; }
+    .sec { position: absolute; top: 200px; right: 72px; left: 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+    .sec-next { margin-top: 22px; padding-top: 16px; border-top: 6px solid var(--purple); --c: var(--purple); }
+    .slide .sec-next .sec-what { margin-top: 8px; }
+    .sec-col { padding-top: 18px; border-top: 8px solid var(--c, var(--ink)); }
+    .slide .sec-when { color: var(--ink-soft); font-size: 18px; font-weight: 700; }
+    .slide .sec-name { margin-top: 8px; color: var(--ink); font-size: 32px; font-weight: 780; letter-spacing: -0.02em; line-height: 1.1; }
+    .slide .sec-what { margin-top: 16px; color: var(--c, var(--ink)); font-size: 26px; font-weight: 700; line-height: 1.3; }
+    .sec-axis { position: absolute; top: 610px; right: 72px; left: 72px; display: flex; align-items: center; gap: 14px; color: var(--ink-soft); font-size: 18px; font-weight: 650; }
+    .sec-axis::before { flex: 1; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--alert), #c9a227, var(--good)); content: ""; }
+    .mcp { position: absolute; top: 178px; left: 50%; width: 680px; margin-left: -340px; padding: 30px 34px 30px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px rgba(56,53,65,.12), 0 28px 60px -24px rgba(56,53,65,.4); }
+    .slide .mcp-h { color: var(--ink); font-size: 24px; font-weight: 780; }
+    .slide .mcp-l { margin-top: 22px; color: var(--ink-soft); font-size: 16px; font-weight: 650; }
+    .slide .mcp-f { margin-top: 8px; padding: 12px 16px; border: 1.5px solid rgba(56,53,65,.22); border-radius: 8px; color: var(--ink); font-size: 22px; font-weight: 560; }
+    .slide .mcp-f.url { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(89,38,235,.15); font-family: "Sora", sans-serif; font-size: 20px; }
+    .mcp-b { display: flex; justify-content: flex-end; gap: 12px; margin-top: 26px; }
+    .slide .mcp-b span { padding: 11px 22px; border-radius: 8px; font-size: 18px; font-weight: 700; }
+    .mcp-b .cancel { color: var(--ink-soft); box-shadow: inset 0 0 0 1.5px rgba(56,53,65,.2); }
+    .mcp-b .go { background: var(--purple); color: #fff; }
+    .slide .mcp-next { position: absolute; right: 72px; bottom: 96px; left: 72px; color: var(--ink); font-size: 26px; font-weight: 650; text-align: center; }
+    .slide .mcp-next b { color: var(--good); font-weight: 780; }
+    .words { margin-top: 64px; }
+    .words-bar { display: flex; height: 64px; overflow: hidden; border-radius: 6px; background: #deddd9; }
+    .words-bar span { display: block; height: 100%; transition: width .8s cubic-bezier(.16,1,.3,1); }
+    .w-me { width: 100%; min-width: 8px; background: var(--good); }
+    .w-read { width: 0; background: #a88ff2; }
+    .w-wrote { width: 0; background: var(--purple); }
+    .words-legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 28px; }
+    .slide .words-legend p { color: var(--ink-soft); font-size: 22px; font-weight: 560; }
+    .words-legend strong { display: block; color: var(--purple); font-family: "Pogonia", "Sora", sans-serif; font-size: 56px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.1; }
+    .words-legend strong.me { color: var(--good); }
+    .w-ai-label { opacity: 0; transition: opacity .45s ease .3s; }
+    .slide:has(.words-time.shown) .w-me { width: 1.1%; }
+    .slide:has(.words-time.shown) .w-read { width: 48.5%; }
+    .slide:has(.words-time.shown) .w-wrote { width: 50.4%; }
+    .slide:has(.words-time.shown) .w-ai-label { opacity: 1; }
+    .slide .words-time { margin-top: 44px; color: var(--purple); font-size: 34px; font-weight: 750; letter-spacing: -0.02em; }
+    .pj { position: absolute; top: 186px; right: 72px; left: 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .pj-col h3 { margin: 0 0 6px; padding-top: 14px; border-top: 6px solid var(--purple); color: var(--purple); font-size: 22px; font-weight: 750; letter-spacing: -0.02em; }
+    .pj-col ul { margin: 0; padding: 0; list-style: none; }
+    .pj-col li { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-bottom: 1px solid rgba(56,53,65,.14); font-size: 20px; line-height: 1.25; }
+    .pj-col li .redact-box { flex: none; width: 84px; }
+    .pj-col li.more { border-bottom: 0; color: var(--ink-soft); }
+    .try { position: absolute; top: 186px; right: 72px; left: 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+    .try-col h3 { margin: 0; padding-top: 16px; border-top: 8px solid var(--purple); color: var(--ink); font-size: 34px; font-weight: 780; letter-spacing: -0.03em; }
+    .slide .try-lead { margin-top: 8px; color: var(--purple); font-size: 22px; font-weight: 700; line-height: 1.3; }
+    .try-col ol { margin: 22px 0 0; padding: 0; list-style: none; counter-reset: t; }
+    .try-col li { display: flex; gap: 14px; padding: 9px 0; border-top: 1px solid rgba(56,53,65,.16); font-size: 20px; line-height: 1.3; counter-increment: t; }
+    .try-col li::before { flex: none; width: 22px; color: var(--purple); font-weight: 750; content: counter(t); }
+    .slide .try-url { margin-top: 18px; color: var(--purple); font-size: 20px; font-weight: 700; }
+    .slide .try-text { margin-top: 22px; font-size: 22px; line-height: 1.35; }
+    .slide .try-cond { margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(56,53,65,.16); font-size: 22px; font-weight: 700; line-height: 1.35; }
+    .slide .step { opacity: 0; transform: translateY(10px); transition: opacity .45s cubic-bezier(.16,1,.3,1), transform .45s cubic-bezier(.16,1,.3,1); }
+    .slide .step.shown { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .slide .step { transition: none; transform: none; } }
+    @media print { .slide .step { opacity: 1 !important; transform: none !important; } }
+  
+    .slide .tc-sub { margin-top: 10px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+    .dist-legend { display: flex; gap: 28px; margin-top: 22px; color: var(--ink-soft); font-size: 18px; font-weight: 600; }
+    .dist-legend span { display: inline-flex; align-items: center; gap: 10px; }
+    .dist-legend i { display: inline-block; width: 22px; height: 14px; border-radius: 3px; }
+    .dist-sw-total, .dist-total { background: #6fc79d; }
+    .dist-sw-ai, .dist-ai { background: var(--purple); }
+    .dist-rows { margin-top: 20px; display: grid; gap: 12px; }
+    .dist-row { display: grid; grid-template-columns: 330px 1fr 80px; gap: 22px; align-items: center; }
+    .slide .dist-label { font-size: 20px; font-weight: 650; }
+    .dist-track { position: relative; height: 32px; }
+    .dist-total, .dist-ai { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; }
+    .dist-ai { border-radius: 4px 0 0 4px; }
+    .slide .dist-val { font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; text-align: right; }
+    .controls .full-btn { display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; }
+    body.is-full { padding: 0; background: #000; overflow: hidden; }
+    body.is-full .controls { display: none; }
+    body.is-full .deck { box-shadow: none; }
+    body.is-full .deck-shell { gap: 0; }
+    .redact { display: inline-block; height: 11px; border-radius: 3px; background: #d9d7df; vertical-align: middle; }
+    .chat { position: absolute; top: 56px; left: 72px; right: 72px; bottom: 104px; display: flex; flex-direction: column; }
+    .chat-body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 14px; overflow: hidden; }
+    .turn { display: flex; flex-shrink: 0; }
+    .slide .turn p { max-width: 64%; padding: 14px 22px; border-radius: 22px; font-size: 24px; line-height: 1.34; letter-spacing: -0.01em; }
+    .turn.me { justify-content: flex-end; }
+    .turn.me p { border-bottom-right-radius: 6px; background: #d7eee2; color: #0b4a33; font-weight: 600; }
+    .turn.ai p { border-bottom-left-radius: 6px; background: var(--lavender); color: #2d2244; font-weight: 500; }
+    .turn.me + .turn.ai, .turn.ai + .turn.me { margin-top: 6px; }
+    .turn.act { align-items: center; gap: 18px; margin-block: 4px; }
+    .turn.act::before, .turn.act::after { content: ""; flex: 1; height: 1px; background: rgba(19, 134, 92, 0.3); }
+    .slide .turn.act p { display: inline-flex; align-items: center; gap: 10px; max-width: 80%; padding: 0; border-radius: 0; background: none; color: var(--good); font-size: 20px; font-weight: 700; letter-spacing: 0; }
+    .slide .turn.act p::before { content: ""; flex: none; width: 22px; height: 22px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='10' fill='%2313865c'/%3E%3Cpath d='M5.6 10.4l2.9 2.9 5.9-6.2' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+    .chat .turn.step { opacity: 1; transform: none; transition: none; }
+    .chat .turn.step:not(.shown), .chat .turn.gone { display: none; }
+    .chat .turn.shown { animation: turn-in .4s cubic-bezier(.16,1,.3,1); }
+    @keyframes turn-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .chat .turn.shown { animation: none; } }
+    @media print { .chat .turn.step:not(.shown) { display: flex !important; } }
+    .replay-end { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(240, 240, 230, 0.94); }
+    .slide .replay-end .replay-time-value { font-size: 140px; }
+    .slide .replay-end .replay-time-label { margin-top: 14px; font-size: 26px; }
+    @media print { .replay-with-head .replay-head { right: 260px; } .replay-end { inset: 40px 72px auto auto; padding: 10px 20px; border-radius: 14px; background: #f0f0e6; } .slide .replay-end .replay-time-value { font-size: 40px; } .slide .replay-end .replay-time-label { margin-top: 4px; font-size: 14px; } }
+    .slide .replay-time-value { color: var(--purple); font-family: "Pogonia", "Sora", sans-serif; font-size: 72px; font-weight: 750; letter-spacing: -0.03em; line-height: 1; }
+    .slide .replay-time-label { margin-top: 8px; color: var(--ink-soft); font-size: 18px; font-weight: 650; }
+    .theme-wrap { display: grid; grid-template-columns: 1fr 360px; gap: 48px; align-items: center; margin-top: 24px; }
+    .theme-row { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center; padding: 16px 0; border-top: 2px solid rgba(56,53,65,.18); }
+    .theme-row:last-child { border-bottom: 2px solid rgba(56,53,65,.18); }
+    .slide .theme-pct { display: flex; align-items: center; gap: 12px; color: var(--ink); font-family: "Pogonia", "Sora", sans-serif; font-size: 42px; font-weight: 750; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .slide .theme-pct::before { content: ""; flex: none; width: 16px; height: 16px; border-radius: 4px; background: var(--sw); }
+    .slide .theme-name { font-size: 30px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.15; }
+    .slide .theme-q { margin-top: 6px; color: var(--ink-soft); font-size: 20px; font-weight: 560; line-height: 1.35; }
+    .theme-row.muted { padding: 10px 0; }
+    .slide .theme-row.muted .theme-pct, .slide .theme-row.muted .theme-name { color: var(--ink-soft); }
+    .slide .theme-row.muted .theme-name { font-size: 22px; }
+    .slide .theme-row.muted .theme-pct { font-size: 28px; }
+    .theme-donut { width: 360px; height: 360px; display: block; }
+    .theme-donut path { stroke: var(--cream); stroke-width: 4; }
+    .theme-donut .dn-num { text-anchor: middle; fill: var(--ink); font-family: "Pogonia", "Sora", sans-serif; font-size: 64px; font-weight: 750; }
+    .theme-donut .dn-lbl { text-anchor: middle; fill: var(--ink-soft); font-size: 22px; font-weight: 600; }
+    .study-v2 { display: grid; grid-template-columns: 620px 1fr; gap: 56px; margin-top: 36px; }
+    .study-v2 .conditions { padding-top: 8px; }
+    .study-v2 .condition-word { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 22px; padding: 22px 0; border-top: 2px solid rgba(56,53,65,.18); font-size: 30px; font-weight: 700; }
+    .study-v2 .condition-word:last-child { border-bottom: 2px solid rgba(56,53,65,.18); }
+    .study-v2 .rank { color: var(--ink-soft); font-size: 20px; font-weight: 600; }
+    .study-v2 .rank.low { color: #c2352a; font-weight: 750; }
+    .study-v2 .finding { padding-left: 48px; border-left: 1px solid rgba(56,53,65,.16); }
+    .study-v2 .finding strong { display: block; color: var(--purple); font-size: 38px; font-weight: 750; letter-spacing: -0.035em; line-height: 1.22; }
+    .slide .study-v2 .finding p { margin-top: 26px; color: var(--ink-soft); font-size: 24px; font-weight: 560; line-height: 1.45; }
+    .section-break .sb { position: absolute; inset: 0 72px; display: flex; flex-direction: column; justify-content: center; padding: 96px 0 70px; }
+    .section-break .sb h2 { position: static; width: 1040px; }
+    .slide.section-break .quiet { margin-top: 18px; color: #9d98aa; font-size: 26px; font-weight: 500; }
+    .slide.section-break .pivot { margin-top: 72px; color: var(--mint); font-size: 48px; font-weight: 700; letter-spacing: -0.025em; }
+    .snake { position: absolute; top: 240px; left: 0; width: 1280px; height: 330px; }
+    .snake svg { position: absolute; inset: 0; overflow: visible; }
+    .sn-done { fill: none; stroke: var(--purple); stroke-width: 8; stroke-linecap: round; }
+    .sn-next { fill: none; stroke: #b9b5c0; stroke-width: 5; stroke-dasharray: 2 14; stroke-linecap: round; }
+    .sn-dot { fill: var(--purple); }
+    .sn-now { fill: var(--purple); stroke: var(--cream); stroke-width: 5; }
+    .sn-halo { fill: var(--purple); opacity: .16; transform-box: fill-box; transform-origin: center; animation: sn-pulse 2.4s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes sn-pulse { 0% { transform: scale(.6); opacity: .35; } 100% { transform: scale(1.35); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .sn-halo { animation: none; } }
+    @media print { .sn-halo { animation: none; opacity: .16; } }
+    .sn-todo { fill: var(--cream); stroke: #9d98a6; stroke-width: 4; }
+    .sn-straight { fill: none; stroke: #8d75d8; stroke-width: 5; stroke-dasharray: 2 12; stroke-linecap: round; }
+    .sn-goal-ring { fill: var(--cream); stroke: var(--purple); stroke-width: 6; }
+    .sn-goal-dot { fill: var(--purple); }
+    .sn-label { position: absolute; text-align: center; }
+    .sn-label span { display: block; font-size: 26px; font-weight: 750; letter-spacing: -0.03em; }
+    .slide .sn-label p { margin-top: 6px; font-size: 18px; font-weight: 560; line-height: 1.35; }
+    .sn-label.done span { color: var(--purple); }
+    .sn-label.now span { color: var(--purple); font-size: 30px; }
+    .slide .sn-label.now p { font-weight: 650; }
+    .sn-label.todo span { color: var(--ink-soft); font-size: 22px; }
+    .slide .sn-label.todo p { color: var(--ink-soft); }
+    .sn-label.goal span { color: var(--purple); font-size: 30px; }
+    .slide .sn-label.goal p { font-weight: 650; }
+    .sn-here { position: absolute; top: -40px; left: 1024px; padding: 8px 13px 9px; border-radius: 4px; background: var(--yellow); color: var(--ink); font-family: "Pogonia", "Sora", sans-serif; font-size: 20px; font-weight: 700; line-height: 1; white-space: nowrap; transform: rotate(-3deg); }
+    .slide .weekly-foot { position: absolute; left: 72px; bottom: 56px; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.015em; }
+    .slide .courses-no { position: absolute; top: 64px; right: 72px; color: var(--purple); font-family: "Pogonia", "Sora", sans-serif; font-size: 22px; font-weight: 750; letter-spacing: .04em; }
+    .courses { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px; }
+    .course { padding-top: 22px; border-top: 8px solid var(--purple); }
+    .slide .course-name { font-size: 40px; font-weight: 780; letter-spacing: -0.035em; line-height: 1.1; }
+    .slide .course-who { margin-top: 12px; color: var(--purple); font-family: "Pogonia", "Sora", sans-serif; font-size: 34px; font-weight: 750; }
+    .slide .course-what { margin-top: 10px; font-size: 24px; font-weight: 560; line-height: 1.35; }
+    .slide .courses-answer { margin-top: 56px; color: var(--purple); font-size: 52px; font-weight: 780; letter-spacing: -0.04em; line-height: 1.1; }
+    .slide .courses-decision { margin-top: 18px; color: var(--ink-soft); font-size: 28px; font-weight: 650; line-height: 1.3; }
+    .replay-head { position: absolute; top: 48px; left: 72px; right: 72px; }
+    .slide .replay-sub { margin-top: 10px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+    .replay-with-head .chat { top: 196px; }
+    .replay-ex { display: grid; gap: 20px; margin-top: 20px; }
+    .replay-ex div { padding-top: 10px; border-top: 4px solid var(--purple); }
+    .slide .replay-ex b { display: block; color: var(--purple); font-size: 18px; font-weight: 750; }
+    .slide .replay-ex p { margin-top: 4px; color: var(--ink); font-size: 18px; line-height: 1.3; }
+
+    .slide .nitro-sub { margin-top: 10px; color: var(--purple); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  </style>
+</head>
+<body>
+  <main class="deck-shell" aria-label="AI az oktató kezében prezentáció">
+    <div class="stage">
+      <div class="deck" aria-live="polite">
+        <section class="slide cover active" aria-label="Címdia">
+          <div class="brand"><img src="assets/img/goschool-logo.svg" alt="GoSchool"><span class="divider" aria-hidden="true"></span><span class="nitro">nitro</span></div>
+          <p class="event">BME Oktatói Klub · 2026. október 6.</p>
+          <div class="cover-copy"><h1>AI az oktató kezében.</h1><p class="subtitle">Mit adunk át az AI-nak, és mi marad a mi felelősségünk?</p></div>
+          <p class="byline">Tamási Árpád · oktató, a GoSchool alapítója · a nyílt forráskódú Moodle Nitro fejlesztője</p>
+          <div class="cover-orbit" aria-hidden="true"></div>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Az előadás három kérdése">
+          <h2 class="slide-title">Miről lesz szó?</h2>
+          <p class="agenda-from">A jelentkezéskor beküldött kérdéseitek alapján</p>
+          <div class="theme-wrap"><div class="theme-list"><div class="theme-row"><p class="theme-pct" style="--sw:var(--purple)">41%</p><div class="theme-main"><p class="theme-name">Kognitív kiszervezés</p><p class="theme-q">Honnan tudhatom, hogy a hallgató használja az agyát? · Mit tehetek, hogy AI mellett is tanuljanak?</p></div></div><div class="theme-row"><p class="theme-pct" style="--sw:#a88ff2">31%</p><div class="theme-main"><p class="theme-name">Az oktató hatékonysága</p><p class="theme-q">Miben segíthet az AI nekem, oktatónak?</p></div></div><div class="theme-row"><p class="theme-pct" style="--sw:var(--yellow)">18%</p><div class="theme-main"><p class="theme-name">Biztonság</p><p class="theme-q">Hová megy az adat, és megbízhatok-e az eredményben?</p></div></div><div class="theme-row muted"><p class="theme-pct" style="--sw:#c9c7c2">10%</p><div class="theme-main"><p class="theme-name">Egyéb</p><p class="theme-q">A beszélgetésben</p></div></div></div>
+          <svg class="theme-donut" viewBox="-190 -190 380 380" role="img" aria-label="A beküldött kérdések megoszlása: 41% kognitív kiszervezés, 31% oktatói hatékonyság, 18% biztonság, 10% egyéb"><path d="M0.0 -180.0A180 180 0 0 1 96.2 152.1L57.7 91.3A108 108 0 0 0 0.0 -108.0Z" style="fill:var(--purple)"/><path d="M96.2 152.1A180 180 0 0 1 -176.4 36.0L-105.8 21.6A108 108 0 0 0 57.7 91.3Z" style="fill:#a88ff2"/><path d="M-176.4 36.0A180 180 0 0 1 -108.1 -143.9L-64.9 -86.3A108 108 0 0 0 -105.8 21.6Z" style="fill:var(--yellow)"/><path d="M-108.1 -143.9A180 180 0 0 1 -0.0 -180.0L-0.0 -108.0A108 108 0 0 0 -64.9 -86.3Z" style="fill:#c9c7c2"/><text x="0" y="-6" class="dn-lbl">a ti</text><text x="0" y="24" class="dn-lbl">kérdéseitek</text></svg></div>
+          <div class="slide-mark">Az előadás útvonala</div><span class="slide-no">02</span>
+        </section>
+
+        <section class="slide section-break" aria-label="1. szakasz">
+          <p class="section-no">01 / 03</p><h2>Honnan tudhatom, hogy a hallgató használja az agyát?</h2>
+          <div class="slide-mark">01 · A hallgató</div><span class="slide-no">03</span>
+        </section>
+
+        <section class="slide slide-pad eeg-slide" aria-label="EEG-kísérlet esszéírás közben">
+          <h2 class="slide-title">EEG-kísérlet esszéírás közben</h2><p class="penalty-intro">MIT Media Lab, 2025 · 54 bostoni egyetemista</p>
+          <div class="study-v2">
+            <div class="conditions" aria-label="A három munkamód">
+              <div class="condition-word"><span class="cw-label">Segítség nélkül</span><span class="rank">legerősebb</span></div>
+              <div class="condition-word"><span class="cw-label">Keresővel</span><span class="rank">köztes</span></div>
+              <div class="condition-word"><span class="cw-label">LLM-mel</span><span class="rank low">leggyengébb</span></div>
+            </div>
+            <div class="finding">
+              <strong>Az LLM-csoportban gyengébb agyi kapcsolódást mértek.</strong>
+              <p>Gyengébb volt a felidézés és a megélt szerzőség is.</p>
+            </div>
+          </div>
+          <p class="caveat-strip">Szűk esszéfeladat, kis minta, preprint: nem általános tanulási hatásvizsgálat.</p>
+          <p class="source">Kosmyna és mtsai, <em>Your Brain on ChatGPT</em>, arXiv preprint, v2</p><span class="slide-no">04</span>
+        </section>
+
+        <section class="slide slide-pad messages" aria-label="Közel negyvenezer hallgatói üzenet">
+          <h2 class="slide-title">Mit csinálnak az AI-val?</h2><p class="messages-count">Közel 40 000 hallgatói üzenet a GoSchoolban</p>
+          <div class="bars-wrap">
+            <div class="bar-row"><p class="bar-label">Magyarázat kérése, majd lezárás</p><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><span class="bar-value">42%</span></div>
+            <div class="bar-row"><p class="bar-label">Feladat vagy leadandó átadása</p><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div><span class="bar-value">28%</span></div>
+            <div class="bar-row"><p class="bar-label">Több kör, de a szintézis az AI-nál marad</p><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><span class="bar-value">≈20%</span></div>
+            <div class="bar-row constructive step"><p class="bar-label">Saját gondolat bekerül és próbára kerül</p><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div><span class="bar-value">≈4%</span></div>
+          </div>
+          <div class="bars-foot"><span>Előzetes, leíró kategorizálás · nem teljes felosztás</span><span>Tamási Árpád · <em>The Power of Outsourcing</em> · 2026</span></div>
+          <div class="slide-mark">01 · A hallgató</div><span class="slide-no">05</span>
+        </section>
+
+        <section class="slide slide-pad penalty-slide" aria-label="Jobb házi, gyengébb dolgozat">
+          <h2 class="slide-title">Jobb házi, gyengébb dolgozat</h2><p class="penalty-intro">26 811 kínai középiskolás · 30 hónap</p>
+          <div class="penalty">
+            <div class="penalty-cell up"><p class="penalty-value">+18%</p><p class="penalty-label">Házi feladat pontszáma</p></div>
+            <div class="penalty-cell neutral key"><p class="penalty-value">−30%</p><p class="penalty-label">Házira fordított idő</p></div>
+            <div class="penalty-cell step"><p class="penalty-value">−20%</p><p class="penalty-label">Havi zárthelyi</p><p class="penalty-when">fél éven belül</p></div>
+            <div class="penalty-cell step"><p class="penalty-value">−24%</p><p class="penalty-label">Felvételi vizsga</p><p class="penalty-when">a másikon −18%</p></div>
+          </div>
+          <p class="penalty-turn step" data-order="9">Kevesebb idő alatt jobb házi. <span class="hl-purple">A tanulást szervezték ki?</span></p>
+          <p class="caveat-strip">Egy kínai megye középiskolásai, munkaanyag.</p><p class="source">Strömberg, Lei, Wu, CEPR DP21577, 2026</p><span class="slide-no">06</span>
+        </section>
+
+        <section class="slide section-break" aria-label="Fordulat">
+          <div class="sb"><h2>A feladataink az eredményt jutalmazzák.</h2>
+          <p class="quiet">mert eddig csak azt láttuk</p>
+          <p class="pivot step">Mi lenne, ha a folyamatot jutalmaznánk?</p></div>
+          <div class="slide-mark">01 · A hallgató</div><span class="slide-no">07</span>
+        </section>
+
+        <section class="slide slide-pad courses-slide" aria-label="2. szakasz: két kurzus">
+          <p class="courses-no">02 / 03 · futó kísérlet</p>
+          <h2 class="slide-title">Mit kell tudnia annak, aki magának ír programot?</h2>
+          <div class="courses">
+            <div class="course"><p class="course-name">Advanced Programming</p><p class="course-who">28 hallgató</p><p class="course-what">Saját szoftver, a saját szakterületükre.</p></div>
+            <div class="course"><p class="course-name">LLM-kurzus oktatóknak</p><p class="course-who">16 oktató és kutató</p><p class="course-what">Saját kutatási eszköz, a saját adataikra.</p></div>
+          </div>
+          <p class="courses-answer step">Szoftvert készíteni önállóan.<br>A fejlesztést kézben tartani.</p>
+          <p class="courses-decision step">Ezért ebben a két kurzusban nem kódolást vagy programnyelvet tanítok.</p>
+          <div class="slide-mark">02 · A feladat</div><span class="slide-no">08</span>
+        </section>
+
+        <section class="slide team-slide" aria-label="Első nap: a csapat">
+          <img class="team-img" src="assets/img/csapat-po.jpg" alt="Szoftverfejlesztő csapat figurákkal, fölöttük az ember mint product owner">
+          <p class="team-tag">Első nap, mindkét kurzuson</p><span class="slide-no">09</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Nálam: a kódírás">
+          <h2 class="slide-title">Ugyanaz az AI, más emberi részvétel</h2>
+          <div class="vcae">
+            <div class="vcae-col">
+              <h3>Kipróbálás<span>vibe coding</span></h3>
+              <div class="vcae-shot" role="img" aria-label="Egy mondatból generált, játszható Minecraft-szerű világ" style="background-image: url('assets/img/vibe-minecraft.png')"><p class="vcae-prompt">„Csinálj nekem egy Minecraftot.”</p></div>
+              <p class="vcae-one">Nem tudom pontosan, mit akarok.</p>
+            </div>
+            <div class="vcae-col ae step">
+              <h3>Ellenőrzött építés<span>agentic engineering</span></h3>
+              <div class="vcae-shot web" role="img" aria-label="A Moodle Nitro weboldala" style="background-image: url('assets/img/nitro-web.png')"></div>
+              <p class="vcae-one">Tudom, mit akarok.</p>
+            </div>
+          </div>
+          <div class="slide-mark">02 · A feladat</div><span class="slide-no">10</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Résztvevők és projektjeik">
+          <h2 class="slide-title">Résztvevők és projektjeik</h2><p class="penalty-intro">Mindenki a saját problémáján dolgozik</p>
+          <div class="pj"><div class="pj-col"><h3>Advanced Programming · hallgatók</h3><ul><li><span class="redact-box"><span class="redact" style="width:67px"></span></span>Személyes pénzügyi tervező banki kivonatokból</li><li><span class="redact-box"><span class="redact" style="width:83px"></span></span>Készséghiány-kereső pályakezdő adatelemzőknek</li><li><span class="redact-box"><span class="redact" style="width:58px"></span></span>Közép-európai légiforgalom adattárháza</li><li><span class="redact-box"><span class="redact" style="width:74px"></span></span>Figyelmetlen kérdőívkitöltők kiszűrése</li><li><span class="redact-box"><span class="redact" style="width:78px"></span></span>Nyomozós játék LLM-vezérelt szereplőkkel</li><li><span class="redact-box"><span class="redact" style="width:55px"></span></span>„Mit vegyek fel ma?” LLM-alapú öltözetajánló</li><li class="more">…</li></ul></div><div class="pj-col"><h3>LLM-kurzus · oktatók és kutatók</h3><ul><li><span class="redact-box"><span class="redact" style="width:67px"></span></span>DP-tábori IRO-akták adatbázisa</li><li><span class="redact-box"><span class="redact" style="width:83px"></span></span>Interjúk és médiatartalom LLM-es elemzése</li><li><span class="redact-box"><span class="redact" style="width:58px"></span></span>A pszichológiáról alkotott laikus tudás</li><li><span class="redact-box"><span class="redact" style="width:74px"></span></span>Az „informalitás” fogalmának változása</li><li><span class="redact-box"><span class="redact" style="width:78px"></span></span>Jövőorientáció mérése nyílt végű válaszok gépi kódolásával</li><li><span class="redact-box"><span class="redact" style="width:55px"></span></span>Vegyes kutatási archívum egységes adatbázisba</li><li class="more">…</li></ul></div></div>
+          <p class="source">A két kurzus projektlistájából · nevek kitakarva</p><div class="slide-mark">02 · A feladat</div><span class="slide-no">11</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Hétről hétre, a saját projektjükön">
+          <h2 class="slide-title">Hétről hétre, a saját projektjükön</h2>
+          <div class="snake">
+            <svg viewBox="0 0 1280 330" width="1280" height="330" aria-hidden="true">
+              <path class="sn-done" d="M110 30 H990"/>
+              <path class="sn-next" d="M990 30 H1090 A60 60 0 0 1 1090 150 H190 A60 60 0 0 0 190 270 H990"/>
+              <circle class="sn-dot" cx="150" cy="30" r="13"/>
+              <circle class="sn-dot" cx="430" cy="30" r="13"/>
+              <circle class="sn-dot" cx="710" cy="30" r="13"/>
+              <circle class="sn-halo" cx="990" cy="30" r="34"/>
+              <circle class="sn-now" cx="990" cy="30" r="21"/>
+              <path class="sn-straight" d="M430 270 H990"/>
+              <circle class="sn-todo" cx="430" cy="270" r="12"/>
+              <circle class="sn-goal-ring" cx="990" cy="270" r="20"/>
+              <circle class="sn-goal-dot" cx="990" cy="270" r="8"/>
+              <circle class="sn-todo small" cx="990" cy="150" r="9"/>
+              <circle class="sn-todo small" cx="850" cy="150" r="9"/>
+              <circle class="sn-todo small" cx="710" cy="150" r="9"/>
+              <circle class="sn-todo small" cx="570" cy="150" r="9"/>
+              <circle class="sn-todo small" cx="430" cy="150" r="9"/>
+              <circle class="sn-todo small" cx="290" cy="150" r="9"/>
+            </svg>
+            <div class="sn-label done" style="left: 20px; top: 54px; width: 260px"><span>Projekt</span><p>Jól definiált?</p></div>
+            <div class="sn-label done" style="left: 300px; top: 54px; width: 260px"><span>Specifikáció</span><p>Bevonódott, vagy csak rábólintott?</p></div>
+            <div class="sn-label done" style="left: 580px; top: 54px; width: 260px"><span>Terv</span><p>Alakított rajta a gép tanácsára?</p></div>
+            <div class="sn-label now" style="left: 840px; top: 58px; width: 300px"><span>Spike</span><p>Kipróbálta a kockázatos pontokat?</p></div>
+            <span class="sn-here">Itt tartunk</span>
+            <div class="sn-label todo" style="left: 510px; top: 172px; width: 400px"><span>Iteráció</span><p>Hetekig, körről körre</p></div>
+            <div class="sn-label todo" style="left: 200px; top: 294px; width: 460px"><span>Reflexió</span><p>A hajrá: mit csinált ő, és mit a gép</p></div>
+            <div class="sn-label goal" style="left: 830px; top: 298px; width: 320px"><span>Bemutatás</span><p>A cél: a végén, nyilvánosan</p></div>
+          </div>
+          <p class="weekly-foot">Mind a 44 projektet követem, és segítek, ahol elakadnak.</p>
+          <div class="slide-mark">02 · A feladat</div><span class="slide-no">12</span>
+        </section>
+
+        <section class="slide room-question" aria-label="Kérdés a teremhez: ki olvassa el">
+          <span class="number">?</span>
+          <h2>Ki olvassa el mindezt 150 hallgatónál?</h2>
+          <div class="recall cost step"><p class="recall-value">600</p><p class="recall-label">ellenőrzés egy beadandónál: 150 hallgató × 4 lépés</p></div>
+          <div class="slide-mark">02 · A feladat</div><span class="slide-no">13</span>
+        </section>
+
+        <section class="slide section-break" aria-label="3. szakasz">
+          <p class="section-no">03 / 03</p><h2>Miben segíthet az AI nekem, oktatónak?</h2>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">14</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Az időm eloszlása">
+          <h2 class="slide-title">Hová ment az időm?</h2>
+          <div class="dist-legend"><span><i class="dist-sw-total"></i>Az időm aránya</span><span><i class="dist-sw-ai"></i>Ebből az AI dolgozott</span></div>
+          <div class="dist-rows"><div class="dist-row"><p class="dist-label">Tananyag és feladatok</p><div class="dist-track"><div class="dist-total" style="width:100.0%"></div><div class="dist-ai" style="width:46.3%"></div></div><p class="dist-val">34%</p></div><div class="dist-row"><p class="dist-label">Kommunikáció</p><div class="dist-track"><div class="dist-total" style="width:59.0%"></div><div class="dist-ai" style="width:17.1%"></div></div><p class="dist-val">20%</p></div><div class="dist-row"><p class="dist-label">Beadások átnézése</p><div class="dist-track"><div class="dist-total" style="width:37.7%"></div><div class="dist-ai" style="width:7.0%"></div></div><p class="dist-val">13%</p></div><div class="dist-row"><p class="dist-label">Értékelés és visszajelzés</p><div class="dist-track"><div class="dist-total" style="width:31.3%"></div><div class="dist-ai" style="width:8.6%"></div></div><p class="dist-val">11%</p></div><div class="dist-row"><p class="dist-label">Hallgatói munka elemzése</p><div class="dist-track"><div class="dist-total" style="width:25.2%"></div><div class="dist-ai" style="width:6.2%"></div></div><p class="dist-val">9%</p></div><div class="dist-row"><p class="dist-label">Egyéb</p><div class="dist-track"><div class="dist-total" style="width:25.4%"></div><div class="dist-ai" style="width:8.2%"></div></div><p class="dist-val">9%</p></div><div class="dist-row"><p class="dist-label">Eszközök, szkriptek</p><div class="dist-track"><div class="dist-total" style="width:12.1%"></div><div class="dist-ai" style="width:7.7%"></div></div><p class="dist-val">4%</p></div></div>
+          <p class="source">Ugyanaz a két kurzus és 1031 kérés · a szünetek nélkül</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">15</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Ki olvasta el">
+          <h2 class="slide-title">A kiszervezés ereje a saját munkámban</h2>
+          <p class="tc-sub">Két saját kurzusom, 2026. szeptember · 60 óra bruttó</p>
+          <div class="words">
+            <div class="words-bar" role="img" aria-label="Szavak: én 15 ezret írtam, az AI 655 ezret olvasott el és 681 ezret írt meg">
+              <span class="w-me"></span><span class="w-read"></span><span class="w-wrote"></span>
+            </div>
+            <div class="words-legend">
+              <p><strong class="me">15 ezer</strong> szót írtam én</p>
+              <p class="w-ai-label"><strong>655 ezer</strong> szót olvasott el az AI</p>
+              <p class="w-ai-label"><strong>681 ezer</strong> szót írt meg az AI</p>
+            </div>
+            <p class="words-time step">×89: minden szavamra 44 elolvasott és 45 megírt szó jutott.</p>
+          </div>
+          <p class="source">Claude Code-átiratokból · az ismételt beolvasások nélkül</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">16</span>
+        </section>
+
+        <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Egyéni üzenet">
+          <div class="replay-head"><h2 class="slide-title">Mindenki egyéni üzenetet kap</h2><p class="replay-sub">„Szia! A Snake megjött, köszönöm. A Cassino még hiányzik, a határidő ma 20:00.”</p></div>
+          <div class="chat"><div class="chat-body"><div class="turn me"><p>az utolsó házi érdekel, azzal hol állunk?<br>aki nem adta be, annak menjen személyes</p></div><div class="turn ai step"><p>16-an mindkét részt beadták, 5-nél csak az első rész van bent, 7-nél semmi. Két változatban megírtam 11 személyes üzenetet. Még nem küldtem el, egy „mehet” kell hozzá.</p></div><div class="turn me step"><p>mehet</p></div><div class="turn act step"><p>Canvas: 11 személyes üzenet elküldve, egyenként</p></div><div class="turn me step"><p>a későknek írj, hogy hétfő estig félpontért csnálják meg</p></div><div class="turn ai step"><p>Itt a tervezet 3 hallgatónak. Egyikük tegnap már kapott üzenetet és nem válaszolt, őt kihagyhatjuk, ha gondolod.</p></div><div class="turn me step"><p>mehet [hallgató]nak is<br>ha megbuktatom, ne mondhassa, hogy nem szóltam</p></div><div class="turn act step"><p>Canvas: 3 személyes üzenet elküldve, szabály elmentve</p></div></div></div>
+          <div class="replay-end step"><p class="replay-time-value">≈ 7 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 18.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">17</span>
+        </section>
+
+        <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Tananyag az igényekhez">
+          <div class="replay-head"><h2 class="slide-title">Egyéni házi: spike a saját projekten</h2><p class="replay-sub">Rövid próba a projekt legkockázatosabb pontjára. Három a huszonnyolcból:</p>
+            <div class="replay-ex" style="grid-template-columns:repeat(3,1fr)"><div><b>Pénzügyi tervező</b><p>Címkézz fel kézzel egy kimaradt hónapot. Hány költést talál el a programod?</p></div><div><b>Kérdőívszűrő</b><p>Ezer valódi kitöltőből hány tisztát jelöl hibásnak?</p></div><div><b>Nyomozós játék</b><p>Harminc valódi modellhívásból hány megy át az ellenőrzőn?</p></div></div></div>
+          <div class="chat" style="top:300px"><div class="chat-body"><div class="turn me"><p>nézd meg az összes projektet, és keresd meg a legnagyobb kockázatot</p></div><div class="turn act"><p>28 ügynök: projektenként a legnagyobb kockázat</p></div><div class="turn ai"><p>Itt vannak, projektenként egy sor: mi a legnagyobb kockázat, és milyen rövid próbafeladat dönti el, hogy megáll-e.</p></div><div class="turn me"><p>ok, azért fikáztasd meg egy ellenséges elemzővel</p></div><div class="turn ai"><p>Kellemetlen eredmény: a javaslatok nagyobb része nem igazi próba, csak feladatlista. Kijavítottam őket.</p></div><div class="turn me"><p>a planning logot átírtam, azt az agent írja, nézd meg</p></div><div class="turn ai"><p>Rendben, a naplót az ágens vezeti, az AGENTS.md szabálya szerint. Mind a 28 leírást egységesítettem.</p></div><div class="turn me"><p>ok mehet ki</p></div><div class="turn act"><p>GitHub: 28 „Your spike” issue, mindenki megkapta a sajátját</p></div><div class="turn me"><p>mehet a kiírás a canvasra</p></div><div class="turn act"><p>Canvas: közlemény kint</p></div></div></div>
+          <div class="replay-end step"><p class="replay-time-value">≈ 60 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">18</span>
+        </section>
+
+        <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Csoportok">
+          <div class="replay-head"><h2 class="slide-title">Csoportot jelölök ki, akik hasonlón dolgoznak</h2><p class="replay-sub">Azonos folyamat, csoportonként egy haladó és egy lemaradó.</p>
+            <div class="replay-ex" style="grid-template-columns:repeat(4,1fr)"><div><b>1. Kódolás</b><p>kódkönyv, gépi kódolás, összevetés a kézivel</p></div><div><b>2. Szakirodalom</b><p>keresés, szűrés, kinyerés</p></div><div><b>3. Korpusz</b><p>letöltés kulcsszavakkal, relevanciaszűrés</p></div><div><b>4. Adatbázis</b><p>séma, kinyerés, tábla, ellenőrzés</p></div></div></div>
+          <div class="chat" style="top:330px"><div class="chat-body"><div class="turn me"><p>na akkor<br>nézd meg egyenként a projekteket és csoportosítsd aszerint, hogy kb ugyanaz a folyamat, amit végig kell csinálniuk</p></div><div class="turn ai"><p>Elolvastam a repók README-jét, terveit és döntési naplóját. Öt folyamat jön ki, két projekt egyikbe sem fér bele.</p></div><div class="turn me"><p>na olyan csoportokat akarok, akik<br>1 egyforma feladatokat kell végezniük<br>2 van benne egyvalaki, akinek már van fogalma<br>3 van olyan is, aki le van maradva</p></div><div class="turn ai"><p>Mind a négy csoportban nem teljesül egyszerre a három feltétel: kevés a haladó, és nem ott ülnek, ahol a lemaradók. Ez a legjobb beosztás, amit találtam.<br><b>1. Kódolás:</b> kódkönyv, gépi kódolás, összevetés a kézivel<br><b>2. Szakirodalom:</b> keresés, szűrés, kinyerés<br><b>3. Korpusz:</b> letöltés kulcsszavakkal, relevanciaszűrés<br><b>4. Adatbázis:</b> séma, kinyerés, tábla, ellenőrzés</p></div><div class="turn me"><p>[hallgató] nem tudja, mit csinál?</p></div><div class="turn ai"><p>De, tudja, tévesen soroltam középre. Így az 1-es csoportban ketten tudják, mit csinálnak, és ez jó, mert kiegészítik egymást.</p></div><div class="turn me"><p>ok<br>tudunk nekik egy discussiont nyitni a githubon?<br>ennek a csoportnak</p></div><div class="turn me"><p>és azért van a csoport, hogy tudjátok egymást segíteni<br>valószínűleg azonos problémákba ütköztük</p></div><div class="turn act"><p>GitHub: 4 csoport-discussion kiposztolva, körlevél piszkozatban</p></div></div></div>
+          <div class="replay-end step"><p class="replay-time-value">≈ 48 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
+          <p class="source">Claude Code · LLM-kurzus oktatóknak · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">19</span>
+        </section>
+
+        <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="A commit-napló">
+          <div class="replay-head"><h2 class="slide-title">Elkaptam egy vibe-olót</h2><p class="replay-sub">A kész szövegből nem látszott. A commit-naplóból igen.</p></div>
+          <div class="chat"><div class="chat-body"><div class="turn me"><p>van friss beadás?</p></div><div class="turn ai step"><p>Igen, egy új. Nem terv, hanem egy kész program leírása. A repóban csak a README van: a kódot feltöltötte, pár nappal később letörölte.</p></div><div class="turn me step"><p>commit log?</p></div><div class="turn ai step"><p>Három commit: előbb a README, egy órával később a teljes kód egyben, kétezer sor, majd a kód törlése.</p></div><div class="turn me step"><p>de gép csinálta?</p></div><div class="turn ai step"><p>Majdnem biztosan gép írta a kódot. Ez önmagában nem baj, a kurzus előírja az ágenshasználatot.</p></div><div class="turn me step"><p>na szerintem egy ötletet megíratott, abból egy readme-t</p></div><div class="turn ai step"><p>Ez illik a bizonyítékokhoz: előbb volt a README, utána a kód. Ötlet, kifejtés, kód. Ez a törlést is megmagyarázza.</p></div><div class="turn me step"><p>ne dicsérjük meg, amit a gép talált ki neki</p></div><div class="turn ai step"><p>Jogos, a dicséret olyasmire ment, amit nem ő talált ki. Kivettem, sokkal rövidebb lett.</p></div><div class="turn me step"><p>mehet</p></div><div class="turn act step"><p>GitHub: visszajelzés az issue-ban, „not yet”, határidő hétfő 20:00</p></div></div></div>
+          <div class="replay-end step"><p class="replay-time-value">≈ 22 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">20</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Amit még AI-jal csináltam">
+          <h2 class="slide-title">Mi mindent csinálok az AI-jal</h2>
+          <div class="did">
+            <div class="did-col"><h3>Tananyag és feladatok</h3><ul>
+              <li>Előadásdiák minden alkalomra</li>
+              <li>Az egyik kurzus anyagát a másikra igazítva</li>
+              <li>Házik, Canvas-modulok, segédletek</li>
+              <li>Kérdésváltozatok a saját projektjeikből</li>
+              <li class="seen">Egyéni spike mindenkinek</li>
+            </ul></div>
+            <div class="did-col step"><h3>Kommunikáció</h3><ul>
+              <li>Kb. 90 személyes Canvas-üzenet</li>
+              <li>8 közlemény, 65 levélpiszkozat</li>
+              <li>Fórum, GitHub-szervezet, issue-k</li>
+              <li>Napi átfutás: új beadás, levél, kérdés</li>
+              <li class="seen">Csoportok kijelölése</li>
+            </ul></div>
+            <div class="did-col step"><h3>Átnézés és értékelés</h3><ul>
+              <li>A napló egyezik-e a tervvel</li>
+              <li>Ellenkezett-e a géppel, vagy csak rábólintott</li>
+              <li>Pont és visszajelzés mindenkinek</li>
+              <li>Ki hol tart, ki maradt le</li>
+              <li class="seen">A commit-napló olvasása</li>
+            </ul></div>
+          </div>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">21</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Konnektorok">
+          <h2 class="slide-title">Mire kötöttem rá?</h2>
+          <p class="hub-ask">Nálatok mit kell még kézzel csinálni?</p>
+          <svg class="hub" viewBox="0 0 1280 720" role="img" aria-label="Én kérek és jóváhagyok; az agentic AI konnektorokon át éri el a GitHubot, a Canvast, az e-mailt és a naptárat. Kattintásra a Canvas helyén Moodle a Nitróval, majd további, még elképzelt konnektorok: Neptun, Teams, tanszéki rendszer.">
+            <rect x="510" y="170" width="260" height="56" rx="28" fill="#d7eee2"/>
+            <text x="640" y="206" text-anchor="middle" style="fill:#0b4a33;font-size:21px;font-weight:780">Én: kérek, jóváhagyok</text>
+            <path d="M620 234v82" stroke="var(--ink)" stroke-width="2.5"/><path d="M613 308l7 10 7-10" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M660 244v82" stroke="var(--ink)" stroke-width="2.5"/><path d="M653 252l7-10 7 10" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+            <text class="h-link" x="606" y="282" text-anchor="end">feladat</text>
+            <text class="h-link" x="674" y="282">előnézet</text>
+            <path class="spoke" d="M557 381L387 320"/><circle class="plug" cx="387" cy="320" r="6"/><path class="spoke" d="M553 423L389 446"/><circle class="plug" cx="389" cy="446" r="6"/><path class="spoke" d="M727 423L891 446"/><circle class="plug" cx="891" cy="446" r="6"/>
+            <g class="canvas-node"><path class="spoke" d="M723 381L893 320"/><circle class="plug" cx="893" cy="320" r="6"/></g>
+            <g class="ghosts"><path class="spoke ghost" d="M563 453L338 579" stroke-dasharray="3 9"/><circle class="plug" cx="338" cy="579" r="6"/><circle cx="300" cy="600" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="300" y="609" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="246" y="609" text-anchor="end">Neptun</text><path class="spoke ghost" d="M640 498L640 568" stroke-dasharray="3 9"/><circle class="plug" cx="640" cy="568" r="6"/><circle cx="640" cy="612" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="640" y="621" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="694" y="621" text-anchor="start">tanszéki rendszer</text><path class="spoke ghost" d="M718 450L971 580" stroke-dasharray="3 9"/><circle class="plug" cx="971" cy="580" r="6"/><circle cx="1010" cy="600" r="34" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="5 7" opacity=".7"/><text x="1010" y="609" text-anchor="middle" style="fill:var(--purple);font-size:26px;font-weight:750">?</text><text class="h-ghost" x="1064" y="609" text-anchor="start">Teams</text></g>
+            <circle cx="640" cy="410" r="82" fill="var(--purple)"/>
+            <text x="640" y="410" text-anchor="middle" style="fill:#fff;font-size:24px;font-weight:780">Agentic AI</text>
+            <text x="640" y="436" text-anchor="middle" style="fill:#e2d9fb;font-size:16px;font-weight:600">Claude Code</text>
+            <circle cx="330" cy="300" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g transform="translate(308 278) scale(2.75)" fill="#24292f" aria-label="GitHub logó"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></g><text class="h-name" x="260" y="294" text-anchor="end">GitHub</text><text class="h-stat" x="260" y="322" text-anchor="end">28 spike-issue</text><text class="h-stat" x="260" y="344" text-anchor="end">commitok, naplók</text>
+            <circle cx="330" cy="455" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g class="ico" transform="translate(310 435) scale(2.2)"><rect x="1" y="3" width="16" height="12" rx="2"/><path d="M1.5 4l7.5 6 7.5-6"/></g><text class="h-name" x="260" y="449" text-anchor="end">E-mail</text><text class="h-stat" x="260" y="477" text-anchor="end">65 levélpiszkozat</text>
+            <circle cx="950" cy="455" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g class="ico" transform="translate(930 435) scale(2.2)"><rect x="1" y="3" width="16" height="13" rx="2"/><path d="M1 7.5h16M5 1v4M13 1v4"/></g><text class="h-name" x="1020" y="449" text-anchor="start">Naptár</text><text class="h-stat" x="1020" y="477" text-anchor="start">órák, határidők</text>
+            <g class="canvas-node"><circle cx="950" cy="300" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g transform="translate(928 278) scale(0.3459)" fill="#e72429" aria-label="Canvas logó"><path d="M18.45,63.47A18.4,18.4,0,0,0,2.31,45.23a73.13,73.13,0,0,0,0,36.47A18.38,18.38,0,0,0,18.45,63.47"/><path d="M29.13,57.7a5.77,5.77,0,1,0,5.77,5.77,5.77,5.77,0,0,0-5.77-5.77"/><path d="M108.72,63.47A18.38,18.38,0,0,0,124.86,81.7a73.13,73.13,0,0,0,0-36.47,18.4,18.4,0,0,0-16.14,18.24"/><path d="M98,57.7a5.77,5.77,0,1,0,5.76,5.77A5.77,5.77,0,0,0,98,57.7"/><path d="M63.46,108.77A18.39,18.39,0,0,0,45.23,124.9a73.13,73.13,0,0,0,36.47,0,18.38,18.38,0,0,0-18.24-16.13"/><path d="M63.47,92.31a5.77,5.77,0,1,0,5.76,5.77,5.77,5.77,0,0,0-5.76-5.77"/><path d="M63.47,18.44A18.37,18.37,0,0,0,81.7,2.31a73.13,73.13,0,0,0-36.47,0A18.39,18.39,0,0,0,63.47,18.44"/><path d="M63.47,23.37a5.77,5.77,0,1,0,5.76,5.76,5.76,5.76,0,0,0-5.76-5.76"/><path d="M95.44,95.44a18.4,18.4,0,0,0-1.5,24.29,73,73,0,0,0,25.78-25.79,18.39,18.39,0,0,0-24.28,1.5"/><path d="M83.8,83.8a5.77,5.77,0,1,0,8.16,0,5.78,5.78,0,0,0-8.16,0"/><path d="M31.59,31.59a18.36,18.36,0,0,0,1.5-24.28A72.93,72.93,0,0,0,7.31,33.09a18.36,18.36,0,0,0,24.28-1.5"/><path d="M35.07,35.08a5.77,5.77,0,1,0,8.16,0,5.78,5.78,0,0,0-8.16,0"/><path d="M95.4,31.53A18.39,18.39,0,0,0,119.69,33,72.88,72.88,0,0,0,93.9,7.25a18.39,18.39,0,0,0,1.5,24.28"/><path d="M91.92,43.17a5.76,5.76,0,1,0-8.15,0,5.76,5.76,0,0,0,8.15,0"/><path d="M31.56,95.37a18.39,18.39,0,0,0-24.28-1.5,73,73,0,0,0,25.78,25.79,18.38,18.38,0,0,0-1.5-24.29"/><path d="M35,83.73a5.77,5.77,0,1,0,8.16,0,5.79,5.79,0,0,0-8.16,0"/></g><text class="h-name" x="1020" y="294" text-anchor="start">Canvas</text><text class="h-stat" x="1020" y="322" text-anchor="start">kb. 90 üzenet</text><text class="h-stat" x="1020" y="344" text-anchor="start">8 közlemény</text></g>
+            <g class="moodle-node step"><path class="spoke on" d="M723 381L893 320"/><circle class="plug" cx="893" cy="320" r="6"/><circle cx="950" cy="300" r="50" fill="#fff" stroke="var(--purple)" stroke-width="3"/><image href="assets/img/moodle-logo.svg" x="912" y="290" width="76" height="19" aria-label="Moodle logó"/><text class="h-name" x="1020" y="294" text-anchor="start">Moodle</text><text class="h-stat" x="1020" y="322" text-anchor="start" style="fill:var(--purple);font-weight:750">a Moodle-höz: Nitro</text></g>
+          </svg>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">22</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Van rá eszköz: Moodle Nitro">
+          <h2 class="slide-title">Egy eszköz, ami leveheti a terhet</h2>
+          <p class="nitro-sub">Moodle Nitro · nyílt forráskódú · nem pont ugyanígy, mint nálam, de ugyanerre</p>
+          <figure class="nitro-shot"><img src="assets/img/nitro-web.png" alt="A Moodle Nitro weboldala"><div class="nitro-qr"><img src="assets/img/nitro-try-qr.png" alt="QR-kód a Moodle Nitro oldalához"><p>goschool-ai.github.io/moodle-nitro</p></div></figure>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">23</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Miből használhatom">
+          <h2 class="slide-title">Miből használhatom?</h2>
+          <div class="cli">
+            <div class="cli-row"><p class="cli-name">Claude</p><div><p class="cli-when">Ma, ezzel próbáltuk ki</p><p class="cli-what">A webes felületről vagy az asztali alkalmazásból.</p></div></div>
+            <div class="cli-row step"><p class="cli-name">Microsoft 365 Copilot</p><div><p class="cli-when">A teljes licenccel</p><p class="cli-what">A BME-nek ez ma nincs meg. Végig még nem teszteltük.</p></div></div>
+            <div class="cli-row step"><p class="cli-name">EdAI</p><div><p class="cli-when">Ebben a félévben tesztelhető, a következőben használható</p><p class="cli-what">A BME saját AI-felülete (edai.bme.hu), GoSchool-alapon. A Nitro ma még nincs benne.</p></div></div>
+          </div>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">24</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Bekötés: az MCP-cím">
+          <h2 class="slide-title">Bekötés</h2>
+          <div class="mcp" role="img" aria-label="Űrlap az AI-felületen: Add MCP, név Moodle Nitro, cím, Connect gomb">
+            <p class="mcp-h">Add MCP</p>
+            <p class="mcp-l">Name</p><p class="mcp-f">Moodle Nitro</p>
+            <p class="mcp-l">URL</p><p class="mcp-f url">https://moodle.goschool.ai/local/nitro/mcp.php</p>
+            <div class="mcp-b"><span class="cancel">Cancel</span><span class="go">Connect</span></div>
+          </div>
+          <p class="mcp-next step">Utána <b>belépsz a Moodle-fiókoddal</b>. Bármikor visszavonhatod.</p>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">25</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Biztonság: hová megy az adat">
+          <h2 class="slide-title">Hová megy az adat?</h2>
+          <div class="sec">
+            <div class="sec-col" style="--c:var(--alert)"><p class="sec-when">Amit én használtam</p><p class="sec-name">Claude Code</p><p class="sec-what">Egyéni előfizetéssel, intézményi szerződés nélkül.</p></div>
+            <div class="sec-col" style="--c:#a07d0c"><p class="sec-when">Intézményi szerződéssel</p><p class="sec-name">Microsoft 365 Copilot</p><p class="sec-what">A teljes licenc a BME-n ma nincs meg.</p></div>
+            <div class="sec-col" style="--c:var(--good)"><p class="sec-when">A BME saját felülete</p><p class="sec-name">EdAI (GoSchool)</p><p class="sec-what">GDPR-megfelelő. A Nitro ebben a félévben kerül bele.</p><div class="sec-next step"><p class="sec-when">Utána</p><p class="sec-what">Akár az egyetemen futó modellel: az adat ki sem megy.</p></div></div>
+          </div>
+          <p class="sec-axis">egyre zártabb</p>
+          <div class="slide-mark">03 · Biztonság</div><span class="slide-no">26</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="A Nitro kipróbálása">
+          <h2 class="slide-title">Ha kipróbálnád</h2>
+          <div class="try">
+            <div class="try-col"><h3>A homokozóban</h3><p class="try-lead">moodle.goschool.ai: egy külön próba-Moodle. Saját kurzust kapsz kitalált hallgatókkal. Október 7-től, kb. 10 perc.</p>
+              <ol><li>Regisztrálj, és megkapod a próbakurzusodat.</li><li>Kösd össze Claude-dal.</li><li>Kérdezd meg: „Milyen kurzusaim vannak?”</li><li>Írass át egy feladatot, és nézd meg az előnézetet.</li></ol>
+              <p class="try-url">goschool-ai.github.io/moodle-nitro</p></div>
+            <div class="try-col step"><h3>A saját Moodle-ödön</h3><p class="try-lead">A plugint a BME rendszergazdája teheti fel.</p>
+              <p class="try-text">Nyílt forráskódú, a kód és a telepítési útmutató a GitHubon van.</p>
+              <p class="try-url">github.com/goschool-ai/moodle-nitro</p>
+              <p class="try-cond">Valódi kurzuson csak intézményi jóváhagyás után.</p></div>
+          </div>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">27</span>
+        </section>
+
+        <section class="slide close" aria-label="Zárókérdés">
+          <div class="brand"><img src="assets/img/goschool-logo.svg" alt="GoSchool"><span class="divider" aria-hidden="true"></span><span class="nitro">nitro</span></div>
+          <h2>Melyik korábbi feladatod nem bizonyítja már ugyanazt a tudást, mint két éve?</h2>
+          <p class="second">Mit kell helyette a hallgatónak megértenie, ellenőriznie vagy megvédenie?</p>
+          <span class="discussion">beszélgessünk</span>
+        </section>
+      </div>
+    </div>
+
+    <nav class="controls" aria-label="Prezentáció vezérlése">
+      <button id="prev" type="button" aria-label="Előző dia">←</button>
+      <span class="counter" id="counter">1 / 28</span>
+      <button id="next" type="button" aria-label="Következő dia">→</button>
+      <button id="full" type="button" class="full-btn" aria-label="Teljes képernyő (F)"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Teljes képernyő</span></button>
+      <span class="hint">Billentyűzet: ← → · szóköz · Home · End · F</span>
+    </nav>
+  </main>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const params = new URLSearchParams(location.search);
+    const requested = Number.parseInt(params.get('slide') || '1', 10);
+    const clean = params.get('clean') === '1';
+    let current = Math.min(Math.max(requested - 1, 0), slides.length - 1);
+
+    if (clean) document.body.classList.add('clean');
+
+    function resizeDeck() {
+      if (clean) return;
+      const stage = document.querySelector('.stage');
+      const deck = document.querySelector('.deck');
+      const full = document.body.classList.contains('is-full');
+      const controlsHeight = full ? 0 : 62;
+      const margin = full ? 0 : 48;
+      const scale = Math.min((window.innerWidth - margin) / 1280, (window.innerHeight - controlsHeight - margin) / 720, full ? Infinity : 1);
+      deck.style.transform = `scale(${scale})`;
+      stage.style.width = `${1280 * scale}px`;
+      stage.style.height = `${720 * scale}px`;
+    }
+
+    const stepsOf = (i) => [...slides[i].querySelectorAll('.step')].sort((a, b) => (+a.dataset.order || 0) - (+b.dataset.order || 0));
+
+    function show(index, revealAll = false) {
+      current = Math.min(Math.max(index, 0), slides.length - 1);
+      stepsOf(current).forEach((el) => el.classList.toggle('shown', revealAll || clean));
+      fitChat(slides[current]);
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      document.getElementById('counter').textContent = `${current + 1} / ${slides.length}`;
+      document.getElementById('prev').disabled = current === 0 && !stepsOf(0).length;
+      document.getElementById('next').disabled = false;
+      const url = new URL(location.href);
+      url.searchParams.set('slide', String(current + 1));
+      history.replaceState(null, '', url);
+    }
+
+    function fitChat(slide) {
+      const body = slide.querySelector('.chat-body');
+      if (!body || !body.clientHeight) return;
+      const turns = [...body.querySelectorAll('.turn')];
+      turns.forEach((t) => t.classList.remove('gone'));
+      const visible = () => turns.filter((t) => getComputedStyle(t).display !== 'none');
+      const overflows = () => {
+        const v = visible(); if (v.length < 2) return false;
+        const cs = getComputedStyle(body);
+        const padT = parseFloat(cs.paddingTop), padB = parseFloat(cs.paddingBottom);
+        const first = v[0].offsetTop - body.offsetTop;
+        const last = v[v.length - 1].offsetTop + v[v.length - 1].offsetHeight - body.offsetTop;
+        return first < padT - 1 || last > body.clientHeight - padB + 1;
+      };
+      let guard = turns.length;
+      while (overflows() && guard--) visible()[0].classList.add('gone');
+    }
+
+    function next() {
+      const pending = stepsOf(current).filter((el) => !el.classList.contains('shown'));
+      if (pending.length) { pending[0].classList.add('shown'); fitChat(slides[current]); }
+      else if (current < slides.length - 1) show(current + 1);
+    }
+
+    function prev() {
+      const shown = stepsOf(current).filter((el) => el.classList.contains('shown'));
+      if (shown.length) { shown[shown.length - 1].classList.remove('shown'); fitChat(slides[current]); }
+      else if (current > 0) show(current - 1, true);
+    }
+
+    document.getElementById('prev').addEventListener('click', prev);
+    document.getElementById('next').addEventListener('click', next);
+    function toggleFullscreen() {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      document.body.classList.toggle('is-full', Boolean(document.fullscreenElement));
+      resizeDeck();
+    });
+    document.getElementById('full').addEventListener('click', toggleFullscreen);
+    addEventListener('beforeprint', () => {
+      slides.forEach((sl) => { const was = sl.classList.contains('active'); sl.querySelectorAll('.step').forEach((el) => el.classList.add('shown')); sl.classList.add('active'); fitChat(sl); if (!was) sl.classList.remove('active'); });
+    });
+    addEventListener('afterprint', () => show(current));
+    addEventListener('resize', resizeDeck);
+    addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') prev();
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') { event.preventDefault(); next(); }
+      if (event.key === 'f' || event.key === 'F') { event.preventDefault(); toggleFullscreen(); }
+      if (event.key === 'Home') show(0);
+      if (event.key === 'End') show(slides.length - 1);
+    });
+    resizeDeck();
+    show(current);
+  </script>
+</body>
+</html>
