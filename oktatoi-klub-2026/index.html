@@ -469,6 +469,49 @@
     .slide .try-url { margin-top: 18px; color: var(--purple); font-size: 20px; font-weight: 700; }
     .slide .try-text { margin-top: 22px; font-size: 22px; line-height: 1.35; }
     .slide .try-cond { margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(56,53,65,.16); font-size: 22px; font-weight: 700; line-height: 1.35; }
+    .kh { position: absolute; top: 168px; right: 72px; bottom: 96px; left: 72px; display: grid; grid-template-columns: 1fr 560px; gap: 28px; }
+    .kh-table { align-self: start; width: 100%; border-collapse: collapse; }
+    .kh-table th { padding: 0 6px 10px; color: var(--ink); font-size: 17px; font-weight: 750; text-align: left; }
+    .kh-table th span { display: block; color: var(--ink-soft); font-size: 14px; font-weight: 560; }
+    .kh-table td { padding: 8px 6px; border-top: 1px solid rgba(56,53,65,.12); vertical-align: middle; }
+    .kh-table tr.sel td { background: #e9e2ff; }
+    .kh-table tr.sel td:first-child { box-shadow: inset 4px 0 0 var(--purple); }
+    .kh-table tr.more td { color: var(--ink-soft); font-size: 16px; }
+    .kh-chip { display: inline-block; width: 26px; height: 22px; margin-right: 8px; border-radius: 5px; background: #d7eee2; color: #0b4a33; font-size: 14px; font-weight: 750; line-height: 22px; text-align: center; vertical-align: middle; }
+    .kh-chip.half { background: #f6ebc4; color: #6b5208; }
+    .kh-chip.no { background: #f7d3cf; color: #8f241c; }
+    .kh-chip.late { box-shadow: inset 0 0 0 2px var(--ink-soft); }
+    .kh-bar { display: inline-block; width: 64px; height: 6px; border-radius: 3px; background: #deddd9; vertical-align: middle; overflow: hidden; }
+    .kh-bar i { display: block; height: 100%; background: var(--good); }
+    .kh-panel { padding: 18px 22px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgba(56,53,65,.12), 0 18px 40px -26px rgba(56,53,65,.4); overflow: hidden; }
+    .slide .kh-panel h3 { margin: 6px 0 0; color: var(--ink); font-size: 21px; font-weight: 780; letter-spacing: -0.02em; }
+    .slide .kh-desc { margin-top: 6px; color: var(--ink-soft); font-size: 15px; line-height: 1.4; }
+    .kh-hws { display: flex; gap: 6px; margin-top: 12px; }
+    .kh-hw { flex: 1; padding: 5px 6px; border-radius: 6px; background: #f3f2ee; color: var(--ink-soft); font-size: 13px; font-weight: 650; text-align: center; }
+    .kh-hw b { display: block; color: var(--ink); font-size: 13px; }
+    .kh-size { display: grid; grid-template-columns: 120px 1fr; gap: 3px 10px; margin: 12px 0 0; font-size: 14px; }
+    .kh-size dt { color: var(--ink-soft); font-weight: 600; }
+    .kh-size dd { margin: 0; color: var(--ink); font-weight: 650; }
+    .kh-panel .redact { display: block; }
+    .kh-h { display: block; height: 16px; margin-top: 12px; border-radius: 4px; background: var(--ink); opacity: .85; }
+    .kh-lines { margin-top: 10px; }
+    .kh-l { display: block; height: 8px; margin-top: 7px; border-radius: 4px; background: #d9d7df; }
+    .kh-l.y { background: #e6dcb4; }
+    .kh-size dd { display: flex; align-items: center; }
+    .kh-size dd .kh-l { margin: 0; }
+    .kh-spike.g { background: #f3f2ee; }
+    .kh-spike { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: #faf6e8; font-size: 14px; line-height: 1.4; }
+    .kh-spike b { color: var(--ink); }
+    .slide .kh-spike p { margin-top: 3px; color: var(--ink); }
+    .vz { position: absolute; inset: 0; width: 1280px; height: 720px; }
+    .vz text { font-family: "Sora", sans-serif; }
+    .vz .vz-row { fill: var(--ink); font-size: 18px; font-weight: 700; }
+    .vz .vz-date, .vz .vz-tick { fill: var(--ink-soft); font-size: 16px; font-weight: 560; }
+    .vz .vz-leg { fill: var(--ink-soft); font-size: 16px; font-weight: 600; }
+    .vz .vz-ax { fill: var(--ink-soft); font-size: 16px; font-weight: 650; }
+    .vz .vz-grid { stroke: rgba(56,53,65,.1); stroke-width: 1; }
+    .vz .vz-diag { stroke: rgba(56,53,65,.28); stroke-width: 1.5; stroke-dasharray: 5 6; }
+    .vz .vz-dlab { fill: var(--ink-soft); font-size: 15px; font-weight: 600; }
     .slide .step { opacity: 0; transform: translateY(10px); transition: opacity .45s cubic-bezier(.16,1,.3,1), transform .45s cubic-bezier(.16,1,.3,1); }
     .slide .step.shown { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { .slide .step { transition: none; transform: none; } }
@@ -774,11 +817,78 @@
           <p class="source">Claude Code-átiratokból · az ismételt beolvasások nélkül</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">16</span>
         </section>
 
+        <section class="slide slide-pad" aria-label="Ki hol tart">
+          <h2 class="slide-title">Ki hol tart?</h2><p class="tc-sub">Advanced Programming · a tábla, amit az AI frissít · nevek nélkül</p>
+          <div class="kh">
+            <table class="kh-table"><thead><tr><th></th><th>Repó<span>09.14.</span></th><th>MVP<span>09.26.</span></th><th>Spike<span>10.04.</span></th></tr></thead><tbody><tr><td><span class="redact" style="width:96px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:86%"></i></span></td><td><span class="kh-chip half late">½</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:90%"></i></span></td></tr><tr><td><span class="redact" style="width:128px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip half late">½</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:65%"></i></span></td></tr><tr><td><span class="redact" style="width:84px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:0%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:79%"></i></span></td><td><span class="kh-chip half late">½</span><span class="kh-bar"><i style="width:60%"></i></span></td></tr><tr class="sel"><td><span class="redact" style="width:110px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:79%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:80%"></i></span></td></tr><tr><td><span class="redact" style="width:120px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:71%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:90%"></i></span></td></tr><tr><td><span class="redact" style="width:90px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:79%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:80%"></i></span></td></tr><tr><td><span class="redact" style="width:104px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:86%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:93%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:80%"></i></span></td></tr><tr><td><span class="redact" style="width:116px"></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:86%"></i></span></td><td><span class="kh-chip ok">1</span><span class="kh-bar"><i style="width:100%"></i></span></td></tr><tr class="more"><td colspan="4">… és még 20 hallgató</td></tr></tbody></table>
+            <aside class="kh-panel">
+              <span class="redact" style="width:120px"></span>
+              <span class="kh-h" style="width:72%"></span>
+              <div class="kh-lines"><span class="kh-l" style="width:96%"></span><span class="kh-l" style="width:88%"></span><span class="kh-l" style="width:54%"></span></div>
+              <div class="kh-hws"><span class="kh-hw"><b>Repó</b>100%</span><span class="kh-hw"><b>Snake</b>75%</span><span class="kh-hw"><b>Cassino</b>100%</span><span class="kh-hw"><b>MVP</b>79%</span><span class="kh-hw"><b>Spike</b>80%</span></div>
+              <dl class="kh-size"><dt>Programkód</dt><dd><span class="kh-l" style="width:46%"></span></dd><dt>Teszt</dt><dd><span class="kh-l" style="width:30%"></span></dd><dt>Követelmény</dt><dd><span class="kh-l" style="width:38%"></span></dd><dt>Napló</dt><dd><span class="kh-l" style="width:58%"></span></dd><dt>Commit</dt><dd><span class="kh-l" style="width:34%"></span></dd></dl>
+              <div class="kh-spike"><b>A spike röviden</b><div class="kh-lines"><span class="kh-l y" style="width:94%"></span><span class="kh-l y" style="width:90%"></span><span class="kh-l y" style="width:97%"></span><span class="kh-l y" style="width:62%"></span></div></div>
+            </aside>
+          </div>
+          <p class="source">Az AI állítja össze a repókból és a beadásokból</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">17</span>
+        </section>
+
+        <section class="slide slide-pad" aria-label="Kód és specifikáció">
+          <h2 class="slide-title">Mennyi kód jut egy követelményre?</h2><p class="tc-sub">Projektenként egy pont · nevek nélkül</p>
+          <svg class="vz" viewBox="0 0 1280 720" role="img" aria-label="Pontdiagram név nélkül: a hallgatói projektek követelményszáma és kódsora, logaritmikus tengelyeken, ferde vonalakkal a követelményenkénti kódmennyiséghez.">
+            <line class="vz-grid" x1="190" y1="540" x2="190" y2="170"/><text class="vz-tick" x="190" y="566" text-anchor="middle">3</text>
+            <line class="vz-grid" x1="526" y1="540" x2="526" y2="170"/><text class="vz-tick" x="526" y="566" text-anchor="middle">10</text>
+            <line class="vz-grid" x1="834" y1="540" x2="834" y2="170"/><text class="vz-tick" x="834" y="566" text-anchor="middle">30</text>
+            <line class="vz-grid" x1="1170" y1="540" x2="1170" y2="170"/><text class="vz-tick" x="1170" y="566" text-anchor="middle">100</text>
+            <line class="vz-grid" x1="190" y1="497" x2="1170" y2="497"/><text class="vz-tick" x="178" y="502" text-anchor="end">300</text>
+            <line class="vz-grid" x1="190" y1="423" x2="1170" y2="423"/><text class="vz-tick" x="178" y="428" text-anchor="end">1 000</text>
+            <line class="vz-grid" x1="190" y1="355" x2="1170" y2="355"/><text class="vz-tick" x="178" y="360" text-anchor="end">3 000</text>
+            <line class="vz-grid" x1="190" y1="281" x2="1170" y2="281"/><text class="vz-tick" x="178" y="286" text-anchor="end">10 000</text>
+            <line class="vz-grid" x1="190" y1="213" x2="1170" y2="213"/><text class="vz-tick" x="178" y="218" text-anchor="end">30 000</text>
+            <line class="vz-diag" x1="446" y1="540" x2="1170" y2="380"/><text class="vz-dlab" x="1164" y="372" text-anchor="end">20 sor / követelmény</text>
+            <line class="vz-diag" x1="190" y1="540" x2="1170" y2="323"/><text class="vz-dlab" x="1164" y="315" text-anchor="end">50 sor / követelmény</text>
+            <line class="vz-diag" x1="190" y1="472" x2="1170" y2="256"/><text class="vz-dlab" x="1164" y="248" text-anchor="end">150 sor / követelmény</text>
+            <line class="vz-diag" x1="190" y1="398" x2="1170" y2="181"/><text class="vz-dlab" x="1164" y="173" text-anchor="end">500 sor / követelmény</text>
+            <circle cx="620.5" cy="384.6" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="759.3" cy="427.2" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="639.8" cy="484.6" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="657.8" cy="496.0" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="733.8" cy="410.4" r="9" fill="#a88ff2" stroke="#fff" stroke-width="2"/>
+            <circle cx="657.8" cy="369.9" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="270.4" cy="511.5" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="553.1" cy="511.0" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="497.0" cy="482.9" r="9" fill="#a88ff2" stroke="#fff" stroke-width="2"/>
+            <circle cx="833.5" cy="501.7" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="927.6" cy="421.4" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="876.6" cy="401.6" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="657.8" cy="496.6" r="9" fill="#a88ff2" stroke="#fff" stroke-width="2"/>
+            <circle cx="657.8" cy="486.8" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="577.4" cy="507.7" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="824.0" cy="454.1" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="657.8" cy="485.8" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="620.5" cy="467.0" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="270.4" cy="387.3" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="771.2" cy="433.9" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="639.8" cy="447.4" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="940.6" cy="192.1" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="1008.0" cy="362.8" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="426.8" cy="453.7" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="690.8" cy="400.1" r="9" fill="var(--purple)" stroke="#fff" stroke-width="2"/>
+            <circle cx="526.5" cy="383.7" r="9" fill="#a88ff2" stroke="#fff" stroke-width="2"/>
+            <circle cx="842.7" cy="413.6" r="9" fill="#a07d0c" stroke="#fff" stroke-width="2"/>
+            <circle cx="959.0" cy="417.1" r="9" fill="#a88ff2" stroke="#fff" stroke-width="2"/>
+            <text class="vz-ax" x="680" y="590" text-anchor="middle">követelmények a specifikációban (log)</text>
+            <text class="vz-ax" x="110" y="355" text-anchor="middle" transform="rotate(-90 110 355)">programkód, sor (log)</text>
+            <circle cx="198" cy="620" r="8" fill="#a07d0c"/><text class="vz-leg" x="214" y="626">teszt a kód 15%-a alatt</text><circle cx="458" cy="620" r="8" fill="#a88ff2"/><text class="vz-leg" x="474" y="626">15–40%</text><circle cx="588" cy="620" r="8" fill="var(--purple)"/><text class="vz-leg" x="604" y="626">40% fölött</text>
+          </svg>
+          <p class="source">A repókból mérve, 2026. október 5.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">18</span>
+        </section>
+
         <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Egyéni üzenet">
           <div class="replay-head"><h2 class="slide-title">Mindenki egyéni üzenetet kap</h2><p class="replay-sub">„Szia! A Snake megjött, köszönöm. A Cassino még hiányzik, a határidő ma 20:00.”</p></div>
           <div class="chat"><div class="chat-body"><div class="turn me"><p>az utolsó házi érdekel, azzal hol állunk?<br>aki nem adta be, annak menjen személyes</p></div><div class="turn ai step"><p>16-an mindkét részt beadták, 5-nél csak az első rész van bent, 7-nél semmi. Két változatban megírtam 11 személyes üzenetet. Még nem küldtem el, egy „mehet” kell hozzá.</p></div><div class="turn me step"><p>mehet</p></div><div class="turn act step"><p>Canvas: 11 személyes üzenet elküldve, egyenként</p></div><div class="turn me step"><p>a későknek írj, hogy hétfő estig félpontért csnálják meg</p></div><div class="turn ai step"><p>Itt a tervezet 3 hallgatónak. Egyikük tegnap már kapott üzenetet és nem válaszolt, őt kihagyhatjuk, ha gondolod.</p></div><div class="turn me step"><p>mehet [hallgató]nak is<br>ha megbuktatom, ne mondhassa, hogy nem szóltam</p></div><div class="turn act step"><p>Canvas: 3 személyes üzenet elküldve, szabály elmentve</p></div></div></div>
           <div class="replay-end step"><p class="replay-time-value">≈ 7 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
-          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 18.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">17</span>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 18.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">19</span>
         </section>
 
         <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Tananyag az igényekhez">
@@ -786,7 +896,7 @@
             <div class="replay-ex" style="grid-template-columns:repeat(3,1fr)"><div><b>Pénzügyi tervező</b><p>Címkézz fel kézzel egy kimaradt hónapot. Hány költést talál el a programod?</p></div><div><b>Kérdőívszűrő</b><p>Ezer valódi kitöltőből hány tisztát jelöl hibásnak?</p></div><div><b>Nyomozós játék</b><p>Harminc valódi modellhívásból hány megy át az ellenőrzőn?</p></div></div></div>
           <div class="chat" style="top:300px"><div class="chat-body"><div class="turn me"><p>nézd meg az összes projektet, és keresd meg a legnagyobb kockázatot</p></div><div class="turn act"><p>28 ügynök: projektenként a legnagyobb kockázat</p></div><div class="turn ai"><p>Itt vannak, projektenként egy sor: mi a legnagyobb kockázat, és milyen rövid próbafeladat dönti el, hogy megáll-e.</p></div><div class="turn me"><p>ok, azért fikáztasd meg egy ellenséges elemzővel</p></div><div class="turn ai"><p>Kellemetlen eredmény: a javaslatok nagyobb része nem igazi próba, csak feladatlista. Kijavítottam őket.</p></div><div class="turn me"><p>a planning logot átírtam, azt az agent írja, nézd meg</p></div><div class="turn ai"><p>Rendben, a naplót az ágens vezeti, az AGENTS.md szabálya szerint. Mind a 28 leírást egységesítettem.</p></div><div class="turn me"><p>ok mehet ki</p></div><div class="turn act"><p>GitHub: 28 „Your spike” issue, mindenki megkapta a sajátját</p></div><div class="turn me"><p>mehet a kiírás a canvasra</p></div><div class="turn act"><p>Canvas: közlemény kint</p></div></div></div>
           <div class="replay-end step"><p class="replay-time-value">≈ 60 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
-          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">18</span>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">20</span>
         </section>
 
         <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="Csoportok">
@@ -794,14 +904,14 @@
             <div class="replay-ex" style="grid-template-columns:repeat(4,1fr)"><div><b>1. Kódolás</b><p>kódkönyv, gépi kódolás, összevetés a kézivel</p></div><div><b>2. Szakirodalom</b><p>keresés, szűrés, kinyerés</p></div><div><b>3. Korpusz</b><p>letöltés kulcsszavakkal, relevanciaszűrés</p></div><div><b>4. Adatbázis</b><p>séma, kinyerés, tábla, ellenőrzés</p></div></div></div>
           <div class="chat" style="top:330px"><div class="chat-body"><div class="turn me"><p>na akkor<br>nézd meg egyenként a projekteket és csoportosítsd aszerint, hogy kb ugyanaz a folyamat, amit végig kell csinálniuk</p></div><div class="turn ai"><p>Elolvastam a repók README-jét, terveit és döntési naplóját. Öt folyamat jön ki, két projekt egyikbe sem fér bele.</p></div><div class="turn me"><p>na olyan csoportokat akarok, akik<br>1 egyforma feladatokat kell végezniük<br>2 van benne egyvalaki, akinek már van fogalma<br>3 van olyan is, aki le van maradva</p></div><div class="turn ai"><p>Mind a négy csoportban nem teljesül egyszerre a három feltétel: kevés a haladó, és nem ott ülnek, ahol a lemaradók. Ez a legjobb beosztás, amit találtam.<br><b>1. Kódolás:</b> kódkönyv, gépi kódolás, összevetés a kézivel<br><b>2. Szakirodalom:</b> keresés, szűrés, kinyerés<br><b>3. Korpusz:</b> letöltés kulcsszavakkal, relevanciaszűrés<br><b>4. Adatbázis:</b> séma, kinyerés, tábla, ellenőrzés</p></div><div class="turn me"><p>[hallgató] nem tudja, mit csinál?</p></div><div class="turn ai"><p>De, tudja, tévesen soroltam középre. Így az 1-es csoportban ketten tudják, mit csinálnak, és ez jó, mert kiegészítik egymást.</p></div><div class="turn me"><p>ok<br>tudunk nekik egy discussiont nyitni a githubon?<br>ennek a csoportnak</p></div><div class="turn me"><p>és azért van a csoport, hogy tudjátok egymást segíteni<br>valószínűleg azonos problémákba ütköztük</p></div><div class="turn act"><p>GitHub: 4 csoport-discussion kiposztolva, körlevél piszkozatban</p></div></div></div>
           <div class="replay-end step"><p class="replay-time-value">≈ 48 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
-          <p class="source">Claude Code · LLM-kurzus oktatóknak · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">19</span>
+          <p class="source">Claude Code · LLM-kurzus oktatóknak · 2026. szeptember 28.</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">21</span>
         </section>
 
         <section class="slide slide-pad replay-slide replay-full replay-with-head" aria-label="A commit-napló">
           <div class="replay-head"><h2 class="slide-title">Elkaptam egy vibe-olót</h2><p class="replay-sub">A kész szövegből nem látszott. A commit-naplóból igen.</p></div>
           <div class="chat"><div class="chat-body"><div class="turn me"><p>van friss beadás?</p></div><div class="turn ai step"><p>Igen, egy új. Nem terv, hanem egy kész program leírása. A repóban csak a README van: a kódot feltöltötte, pár nappal később letörölte.</p></div><div class="turn me step"><p>commit log?</p></div><div class="turn ai step"><p>Három commit: előbb a README, egy órával később a teljes kód egyben, kétezer sor, majd a kód törlése.</p></div><div class="turn me step"><p>de gép csinálta?</p></div><div class="turn ai step"><p>Majdnem biztosan gép írta a kódot. Ez önmagában nem baj, a kurzus előírja az ágenshasználatot.</p></div><div class="turn me step"><p>na szerintem egy ötletet megíratott, abból egy readme-t</p></div><div class="turn ai step"><p>Ez illik a bizonyítékokhoz: előbb volt a README, utána a kód. Ötlet, kifejtés, kód. Ez a törlést is megmagyarázza.</p></div><div class="turn me step"><p>ne dicsérjük meg, amit a gép talált ki neki</p></div><div class="turn ai step"><p>Jogos, a dicséret olyasmire ment, amit nem ő talált ki. Kivettem, sokkal rövidebb lett.</p></div><div class="turn me step"><p>mehet</p></div><div class="turn act step"><p>GitHub: visszajelzés az issue-ban, „not yet”, határidő hétfő 20:00</p></div></div></div>
           <div class="replay-end step"><p class="replay-time-value">≈ 22 perc</p><p class="replay-time-label">ennyi volt a beszélgetés</p></div>
-          <p class="source">Claude Code · Advanced Programming · 2026. szeptember</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">20</span>
+          <p class="source">Claude Code · Advanced Programming · 2026. szeptember</p><div class="slide-mark">03 · Az oktató</div><span class="slide-no">22</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Amit még AI-jal csináltam">
@@ -829,7 +939,7 @@
               <li class="seen">A commit-napló olvasása</li>
             </ul></div>
           </div>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">21</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">23</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Konnektorok">
@@ -853,14 +963,14 @@
             <g class="canvas-node"><circle cx="950" cy="300" r="50" fill="#fff" stroke="rgba(56,53,65,.2)" stroke-width="2"/><g transform="translate(928 278) scale(0.3459)" fill="#e72429" aria-label="Canvas logó"><path d="M18.45,63.47A18.4,18.4,0,0,0,2.31,45.23a73.13,73.13,0,0,0,0,36.47A18.38,18.38,0,0,0,18.45,63.47"/><path d="M29.13,57.7a5.77,5.77,0,1,0,5.77,5.77,5.77,5.77,0,0,0-5.77-5.77"/><path d="M108.72,63.47A18.38,18.38,0,0,0,124.86,81.7a73.13,73.13,0,0,0,0-36.47,18.4,18.4,0,0,0-16.14,18.24"/><path d="M98,57.7a5.77,5.77,0,1,0,5.76,5.77A5.77,5.77,0,0,0,98,57.7"/><path d="M63.46,108.77A18.39,18.39,0,0,0,45.23,124.9a73.13,73.13,0,0,0,36.47,0,18.38,18.38,0,0,0-18.24-16.13"/><path d="M63.47,92.31a5.77,5.77,0,1,0,5.76,5.77,5.77,5.77,0,0,0-5.76-5.77"/><path d="M63.47,18.44A18.37,18.37,0,0,0,81.7,2.31a73.13,73.13,0,0,0-36.47,0A18.39,18.39,0,0,0,63.47,18.44"/><path d="M63.47,23.37a5.77,5.77,0,1,0,5.76,5.76,5.76,5.76,0,0,0-5.76-5.76"/><path d="M95.44,95.44a18.4,18.4,0,0,0-1.5,24.29,73,73,0,0,0,25.78-25.79,18.39,18.39,0,0,0-24.28,1.5"/><path d="M83.8,83.8a5.77,5.77,0,1,0,8.16,0,5.78,5.78,0,0,0-8.16,0"/><path d="M31.59,31.59a18.36,18.36,0,0,0,1.5-24.28A72.93,72.93,0,0,0,7.31,33.09a18.36,18.36,0,0,0,24.28-1.5"/><path d="M35.07,35.08a5.77,5.77,0,1,0,8.16,0,5.78,5.78,0,0,0-8.16,0"/><path d="M95.4,31.53A18.39,18.39,0,0,0,119.69,33,72.88,72.88,0,0,0,93.9,7.25a18.39,18.39,0,0,0,1.5,24.28"/><path d="M91.92,43.17a5.76,5.76,0,1,0-8.15,0,5.76,5.76,0,0,0,8.15,0"/><path d="M31.56,95.37a18.39,18.39,0,0,0-24.28-1.5,73,73,0,0,0,25.78,25.79,18.38,18.38,0,0,0-1.5-24.29"/><path d="M35,83.73a5.77,5.77,0,1,0,8.16,0,5.79,5.79,0,0,0-8.16,0"/></g><text class="h-name" x="1020" y="294" text-anchor="start">Canvas</text><text class="h-stat" x="1020" y="322" text-anchor="start">kb. 90 üzenet</text><text class="h-stat" x="1020" y="344" text-anchor="start">8 közlemény</text></g>
             <g class="moodle-node step"><path class="spoke on" d="M723 381L893 320"/><circle class="plug" cx="893" cy="320" r="6"/><circle cx="950" cy="300" r="50" fill="#fff" stroke="var(--purple)" stroke-width="3"/><image href="assets/img/moodle-logo.svg" x="912" y="290" width="76" height="19" aria-label="Moodle logó"/><text class="h-name" x="1020" y="294" text-anchor="start">Moodle</text><text class="h-stat" x="1020" y="322" text-anchor="start" style="fill:var(--purple);font-weight:750">a Moodle-höz: Nitro</text></g>
           </svg>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">22</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">24</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Van rá eszköz: Moodle Nitro">
           <h2 class="slide-title">Egy eszköz, ami leveheti a terhet</h2>
           <p class="nitro-sub">Moodle Nitro · nyílt forráskódú · nem pont ugyanígy, mint nálam, de ugyanerre</p>
           <figure class="nitro-shot"><img src="assets/img/nitro-web.png" alt="A Moodle Nitro weboldala"></figure>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">23</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">25</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Miből használhatom">
@@ -870,7 +980,7 @@
             <div class="cli-row step"><p class="cli-name">Microsoft 365 Copilot</p><div><p class="cli-when">A teljes licenccel</p><p class="cli-what">A BME-nek ez ma nincs meg. Végig még nem teszteltük.</p></div></div>
             <div class="cli-row step"><p class="cli-name">EdAI</p><div><p class="cli-when">Ebben a félévben tesztelhető, a következőben használható</p><p class="cli-what">A BME saját AI-felülete (edai.bme.hu), GoSchool-alapon. A Nitro ma még nincs benne.</p></div></div>
           </div>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">24</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">26</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Bekötés: az MCP-cím">
@@ -882,7 +992,7 @@
             <div class="mcp-b"><span class="cancel">Cancel</span><span class="go">Connect</span></div>
           </div>
           <p class="mcp-next step">Utána <b>belépsz a Moodle-fiókoddal</b>. Bármikor visszavonhatod.</p>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">25</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">27</span>
         </section>
 
         <section class="slide slide-pad" aria-label="Biztonság: hová megy az adat">
@@ -893,7 +1003,7 @@
             <div class="sec-col" style="--c:var(--good)"><p class="sec-when">A BME saját felülete</p><p class="sec-name">EdAI (GoSchool)</p><p class="sec-what">GDPR-megfelelő. A Nitro ebben a félévben kerül bele.</p><div class="sec-next step"><p class="sec-when">Utána</p><p class="sec-what">Akár az egyetemen futó modellel: az adat ki sem megy.</p></div></div>
           </div>
           <p class="sec-axis">egyre zártabb</p>
-          <div class="slide-mark">03 · Biztonság</div><span class="slide-no">26</span>
+          <div class="slide-mark">03 · Biztonság</div><span class="slide-no">28</span>
         </section>
 
         <section class="slide slide-pad" aria-label="A Nitro kipróbálása">
@@ -907,13 +1017,13 @@
               <p class="try-url">github.com/goschool-ai/moodle-nitro</p>
               <p class="try-cond">Valódi kurzuson csak intézményi jóváhagyás után.</p></div>
           </div>
-          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">27</span>
+          <div class="slide-mark">03 · Az oktató</div><span class="slide-no">29</span>
         </section>
 
         <section class="slide quote-slide" aria-label="Whitehead a kiszervezésről">
           <p class="big-quote">„A civilizáció úgy halad előre, hogy egyre több fontos műveletet tudunk elvégezni <span class="q-mark">anélkül, hogy gondolkodnánk rajtuk</span>.”</p>
           <p class="quote-by">Alfred North Whitehead<span>An Introduction to Mathematics, 1911</span></p>
-          <span class="slide-no">28</span>
+          <span class="slide-no">30</span>
         </section>
 
         <section class="slide close" aria-label="Zárókérdés">
@@ -928,7 +1038,7 @@
 
     <nav class="controls" aria-label="Prezentáció vezérlése">
       <button id="prev" type="button" aria-label="Előző dia">←</button>
-      <span class="counter" id="counter">1 / 29</span>
+      <span class="counter" id="counter">1 / 31</span>
       <button id="next" type="button" aria-label="Következő dia">→</button>
       <button id="full" type="button" class="full-btn" aria-label="Teljes képernyő (F)"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Teljes képernyő</span></button>
       <span class="hint">Billentyűzet: ← → · szóköz · Home · End · F</span>
